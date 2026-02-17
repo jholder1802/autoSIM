@@ -1,3 +1,17 @@
 *.log
 *.asv
 *.pdf
+*.fig
+*.png
+
+# # Persönliche Daten
+data/
+local_config/
+
+# Temporäre MATLAB Dateien
+*.asv
+*.mex*
+*.mat
+*.fig
+*.slx
+*.mdl

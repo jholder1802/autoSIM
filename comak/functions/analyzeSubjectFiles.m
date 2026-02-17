@@ -330,7 +330,6 @@ else
             [forceReporter_data, forceReporter_labels, forceReporter_header] = read_opensim_mot(filesForceReporter_dealed{i});
             [bodyKinematics_data, bodyKinematics_labels, bodyKinematics_header] = read_opensim_mot(filesBodyKinematics_dealed{i});
 
-
             tmpError = load(filesErrorIKLocs_dealed{i});
             IK_errorLocs = tmpError.errors;
 
@@ -348,7 +347,7 @@ else
                 if contains(FileNames_InputData{k},name_tmp); trialNameInputData = FileNames_InputData{k}; end
             end
 
-            % Add side tag to force labels which don´t have appended the side to their names
+            % Add side tag to force labels which donï¿½t have appended the side to their names
             contactForce_labels_side = {}; % initialize
             side_tmp = char(lower(InputData.(trialNameInputData).Side(1)));
             for s = 1 : length(contactForce_labels)

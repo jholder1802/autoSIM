@@ -87,6 +87,13 @@ switch labFlag
 
     case {'LKHG_PiG'}
         path2setupFiles = fullfile(path2setupFiles,'Models\LKHG_PiG\');
+    
+    case 'PLUS_COD_noArms'
+        path2setupFiles = fullfile(path2setupFiles,'Models\PLUS_COD_noArms\');
+
+    case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
+        path2setupFiles = fullfile(path2setupFiles,'Models\PLUS_pilotMC_noArms\');
+
 end
 
 % Set some necessary paths
@@ -118,7 +125,7 @@ cd(path.workingDirectory);
 
 %% Set trial info
 trialInfo.startTime = IC;
-trialInfo.endTime = ICi;
+trialInfo.endTime = TO;  % default: % ICi; % Huthöfer
 trialInfo.fileName = strcat(prefix, filename, '_', lower(side(1)));
 
 %% Create COMAK input and results folder and Copy setupFiles in working directory
@@ -195,7 +202,7 @@ changeXML(xmlFile,'force_set_file',path.forceSetFile,1);
 changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),1);
 changeXML(xmlFile,'stop_time',num2str(trialInfo.endTime),1);
 changeXML(xmlFile,'time_step','0.01',1); % Default 0.01
-changeXML(xmlFile,'lowpass_filter_frequency','6',1);
+changeXML(xmlFile,'lowpass_filter_frequency','10',1); % default 6, Markus has tested 10 Hz for kinematics and kinetics and it looks good so far
 
 % Contact energy settings 
 changeXML(xmlFile,'contact_energy_weight',num2str(contactEnergy),1);
@@ -237,7 +244,7 @@ changeXML(xmlFile,'results_file_basename', statesFileName,1);
 changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),1); % trialInfo.startTime
 changeXML(xmlFile,'stop_time',num2str(trialInfo.endTime),1);
 changeXML(xmlFile,'normalize_to_cycle', timeNorm,1); % Will normalize to 100% gait cycle
-changeXML(xmlFile,'lowpass_filter_frequency','6',1); % Default = -1 (false)
+changeXML(xmlFile,'lowpass_filter_frequency','10',1); % Default = -1 (false) % default 6, Markus has tested 10 Hz for kinematics and kinetics and it looks good so far
 changeXML(xmlFile,'print_processed_kinematics','true',1); % Default = false
 changeXML(xmlFile,'write_vtp_files',char(string(writeVtp)),1); % Default = true
 changeXML(xmlFile,'write_h5_file','true',1);

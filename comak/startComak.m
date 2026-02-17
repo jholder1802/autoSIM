@@ -1,4 +1,4 @@
-clear all; close all; clc;
+clear; close all; clc;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Starting the COMAK workflow %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -59,7 +59,7 @@ repoPaths.commonFiles = fullfile(strcat(repoPath,'\..\_commonFiles'));
 
 % ------------ START SUPER LOOP -------------------------------------------
 % Your database folder to analyze:
-rootDirs = {'E:\LocDat\GitHub\autoSIM\_commonFiles\dataExamples\OSS\'};
+rootDirs = {'C:\Users\b1097908\Documents\GitHub\autoSIM\_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04'};
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -102,8 +102,8 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {'E:\LocDat\GitHub\autoSIM\_commonFiles\dataExamples\OSS\'}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
-            staticC3dFiles = {'Static.c3d'}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
+            workingDirectories = fullfile(rootDirs,'Counter-movementjumpsession\'); % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            staticC3dFiles = fullfile(rootDirs,'Staticandfunctionalsession\Static 1.c3d'); % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
 
         case 2
             %----- Option #2 ----------------------------------------------------------
@@ -114,7 +114,7 @@ for j = 1 : length(rootDirs)
             % inputvar (e.g., 'static') OR by 'byEnfDescription' which will look for the file based on the description in the *.enf file. The latter is the standard for the OSS.
             % Note that the third input is a string pattern for which the script would look at the end of potential static trials, i.e. "A" for "StandA" trials.
             %---
-            [workingDirectories, staticC3dFiles] = getTopLvlFoldersStatics(rootDirectory, 'byEnfDescription', 'Stand', ''); % default (OSS only!) = 'byEnfDescription', 'Stand', '';  default (general) = 'byC3dFilePatternName', 'Static', '';
+            [workingDirectories, staticC3dFiles] = getTopLvlFoldersStatics(rootDirectory, 'byC3dFilePatternName', 'Static', ''); % default (OSS only!) = 'byEnfDescription', 'Stand', '';  default (general) = 'byC3dFilePatternName', 'Static', '';
 
         case 3
             %----- Option #3 ----------------------------------------------------------
@@ -130,12 +130,14 @@ for j = 1 : length(rootDirs)
 
     % Rename all c3d files based on their descriptions in the *.enf files?
     % If there is no Description, files will be changed to NoEnfDescriptionFound_X.Trial.enf
-    renameC3DFiles2enfDescription = true; % default (OSS only!) = true; otherwise false
+    renameC3DFiles2enfDescription = false; % default (OSS only!) = true; otherwise false
 
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'WalkA'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    conditions =  {'Counter-Movement Jump'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    % % ,'Gait','Running','Counter-Movement Jump Left',...
+    %    'Drop Jump Bilateral','Single-Leg Jump Left','Squatting','Squatting Left'
 
     %% ===== Simulation Settings ==============================================
 
@@ -160,9 +162,9 @@ for j = 1 : length(rootDirs)
     % force. The "Body Height Squared Method" is based on the paper of van der Krogt
     % (https://doi.org/10.1016/j.gaitpost.2012.01.017) and uses the (ratio of the
     % body heights)^2 as the scale factor.
-    bodyheightGenericModel = 1650;         % in mm; for the comak Model this is 1650 mm
-    scaleMuscleStrength = 'height2pow3'; % default = 'height2pow2', height2pow3, 'No', 'manually', 'HeightSquared'
-    manualMusScaleF = 0;
+    bodyheightGenericModel = 1650;          % in mm; for the comak Model this is 1650 mm
+    scaleMuscleStrength = 'manually';    % default = 'height2pow2', height2pow3, 'No', 'manually', 'HeightSquared'
+    manualMusScaleF = 3;                    % default = 0, jh (10.11.2025)
 
     %%----- Lock Suptalar Joint -----------------------------------------------
     % Lock Subtalar for scaling? This might be usefull if you only have one
@@ -176,7 +178,7 @@ for j = 1 : length(rootDirs)
 	% While you have this option, our results showed using the standard scaling 
 	% based on the HJC seems to be the more accurate approach.
     pelvisWidthGenericModel = 289;  % ASIS-ASIS in mm
-    scalePelvisManually = false;    % default = false; or false.
+    scalePelvisManually = false;    % default = true; or false.
 
     %%----- Use Automatic Scaling Tool AST? -----------------------------------
     %Do you want to use the The Automated Scaling Tool (AST) to automate the
@@ -204,8 +206,8 @@ for j = 1 : length(rootDirs)
     varNameKneeAngle_c3d.L = 'LKneeAngles';             % default = 'LKneeAngles'; this depends on how the variable is defined in your *.c3d files.
     varNameKneeAngle_c3d.posFront = 2;                  % default = 2; You can specify the position (column) of the frontal plane data in your *.c3d files.
     varNameKneeAngle_c3d.posTrans = 3;                  % default = 3; You can specify the position (column) of the transverse plane data in your *.c3d files (later needed for TT).
-    useStatic4FrontAlignmentAsFallback = true;          % default = false; true or false
-    tf_angle_fromSource = 'fromStatic';                 % default = 'false'; 'false', 'fromStatic', 'fromExtDataFile', 'manual'
+    useStatic4FrontAlignmentAsFallback = true;         % default = false; true or false
+    tf_angle_fromSource = 'false';                      % default = 'false'; 'false', 'fromStatic', 'fromExtDataFile', 'manual'
     tf_angle_r = 0;                                     % default = 0
     tf_angle_l = 0;                                     % default = 0
 
@@ -217,11 +219,11 @@ for j = 1 : length(rootDirs)
     % You can also directly specifiy to use the direct kinematics data from the dynamic c3d files as TT value for the TorsionTool.
     % NOTE: before using the TorsionTool check the hardcoded default values in the main torsion script, since based on these the torsion will be adjusted accordingly!
     % NOTE to 'fromStatic' - we currently use the CleveLand Model (from OSS - Speising). Here external TT is NEGATIVE. Currently this values is multiplied by -1 to have the correct sign for the TorsionTool (where ext. TT is POSITIVE).
-    useDirectKinematics4TibRotEstimationAsFallback = false;      % default = false; true or false;
-    tibTorsionAdaptionMethod = 'fromStatic';                % default = 'fromStatic'; 'fromExtDataFile' or 'fromStatic'
-    tibTorsionAdaption = true;                                  % default = false; true or false
-    neckShaftAdaption = false;                                   % default = false; true or false
-    femurAntetorsionAdaption = false;                            % default = false; true or false
+    useDirectKinematics4TibRotEstimationAsFallback = false;         % default = false; true or false;
+    tibTorsionAdaptionMethod = 'fromStatic';                        % default = 'fromStatic'; 'fromExtDataFile' or 'fromStatic'
+    tibTorsionAdaption = false;                                     % default = false; true or false
+    neckShaftAdaption = false;                                      % default = false; true or false
+    femurAntetorsionAdaption = false;                               % default = false; true or false
 
     %%----- Check & Adapt Wrapping Objects ------------------------------------
     % Decide whether you want to automatically check and adapt discontinuities in
@@ -233,8 +235,8 @@ for j = 1 : length(rootDirs)
 
     %%----- Contact Energy ----------------------------------------------------
     % Specify COMAK settings, Contact Energy and Muscle Weight
-    contactE = 100; % default = 100; value of Contact Energy weighting, e.g. 0 - ~500; 100-150 seem reasonable and reduce the 2nd KJCF peak reasonable in my experiments
-    MW = 'true'; % 'true' or 'false'. Weights are predefined in setting files. default = 'true' (see Colin Smith, <add here>)
+    contactE = 0; % default = 100; value of Contact Energy weighting, e.g. 0 - ~500; 100-150 seem reasonable and reduce the 2nd KJCF peak reasonable in my experiments
+    MW = 'false'; % 'true' or 'false'. Weights are predefined in setting files. default = 'true' (see Colin Smith, <add here>)
 
     %%----- Contact Geometry --------------------------------------------------
     % Define which bodypart has first contact to ground (e.g. for generating the external loads file)
@@ -246,7 +248,7 @@ for j = 1 : length(rootDirs)
     % of the pelvis? If yes, toggle to true. Note: you will manually need to
     % set the scaling to non-uniform in the scale setup file! Settings this to
     % true only adds the markers to the static *.trc file.
-    addPelvisHelperMarker = true; % default = true; true or false
+    addPelvisHelperMarker = false; % default = true; true or false
 
     %%----- Create *.MOT and *.TRC Files --------------------------------------
     % Do you want to create *.trc and *.mot files automatically using the built-in code? If so, set to true. Note that
@@ -258,7 +260,7 @@ for j = 1 : length(rootDirs)
     % Add file-prefix to distinguish different setups, for example to indicate a specfic trial 'variation', e.g. 'with_muscle_optimization'
     % Note: for convenience during group analysis it is recommended to always use a prefix!
     % Note always separate prefix conditions with '-' (standard-CE150). Do not use an '_'! Otherwise it will not work.
-    prefix = 'standard'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
+    prefix = 'lig5-sgf1000'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
 
     %%----- Data Augmentation -------------------------------------------------
     % Data Augmentation-Mode. If you set this to true, each trial will be run
@@ -269,7 +271,7 @@ for j = 1 : length(rootDirs)
     %%----- Generate new models -----------------------------------------------
     % Force Model Creation? If set to true, the workflow will always scale and
     % generate a new model. Otherwise, a model will be only created if no appropriate models are found.
-    ForceModelCreation = true; % default = true; true or false
+    ForceModelCreation = false; % default = true; true or false
 
     %%----- Allow autorestart of Matlab ---------------------------------------
     % This function might be helpful for large-scale simulation studies and if
@@ -283,7 +285,7 @@ for j = 1 : length(rootDirs)
     % the set threshold. 
     allowAutoRestart = false; % default = false; true or false
     iterationCntRestart = 500; % default = 500; to turn this off, set to e.g. 999999 
-    thresholdFreeRAM = 10; % default = 10; in percentaged of available RAM;
+    thresholdFreeRAM = 20; % default = 10; in percentaged of available RAM;
 
     %% ===== PostProcessing Settings ==========================================
 
@@ -302,7 +304,7 @@ for j = 1 : length(rootDirs)
     %%----- Specify Type of Trials --------------------------------------------
     % Set trial type for plotting: walking or not "something else" (=notWalking)
     % This is only necessray to have the plots nicely formatted.
-    trialType = 'walking'; % default = 'walking'; 'walking' or 'notWalking';
+    trialType = 'notWalking'; % default = 'walking'; 'walking' or 'notWalking';
 
     %% ===== COMAK Processing Settings ========================================
 
@@ -312,7 +314,7 @@ for j = 1 : length(rootDirs)
     % Paraview 5.5.2 to view the 3D mesh files and inspect loads.
     % NOTE: the post processing pipeline will not work if you do not write the
     % *.vtp files!
-    writeVtp = true; % default = true; true or false
+    writeVtp = false; % default = true; true or false
 
     %%----- Which *.vtp files to write? ---------------------------------------
     % Here you can specify which *.vtp files should be created. This can save
@@ -330,17 +332,17 @@ for j = 1 : length(rootDirs)
 
     %%----- Set Lab  ----------------------------------------------------------
     % Define from which lab the data come from
-    labFlag = 'OSSnoArms'; % 'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', 'FHSTPnoArms', 'ISW', 'LKHG_Cleve', 'LKHG_PiG'
+    labFlag = 'PLUS_SportsMarkerset_noArms_newFPs'; % PLUS_SportsMarkerset_noArms', 'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', 'FHSTPnoArms', 'ISW', 'LKHG_Cleve', 'LKHG_PiG'
 
     %%----- Set max. N of cmd windows -----------------------------------------
     % Define number of allowed simultaneously running cmd windows.
-    maxCmd = 30; % default = 8 (for a Surface Book2 @i7-8650U @ 1.90Ghz), 31 for 32-core Server
+    maxCmd = 8; % default = 8 (for a Surface Book2 @i7-8650U @ 1.90Ghz), 31 for 32-core Server
 
     %%----- CPU Load Threshold ------------------------------------------------
     % Define a threshold the CPU-load has to fall below (median over 1 minutes), before the next batch of files are forwarded to the cmd window.
-    % In case this is set to false the workflow will use the amount of open cmd windows to control CPU load. Here the above threshold <maxCmd> will be used as cut-off.
-    thresholdCpuLoad = 60;      % default ~ 40% for Laptop, ~60% for 64-core Server
-    useCPUThreshold = true;    % default = true; true or false
+    % In case this is set to False the workflow will use the amount of open cmd windows to control CPU load. Here the above threshold <maxCmd> will be used as cut-off.
+    thresholdCpuLoad = 40;      % default ~ 40% for Laptop, ~70% for 64-core Server
+    useCPUThreshold = false;    % default = false; true or false
 
     % NOTE: it seems that the function <CpuLoadBasedPausing> & <CpuLoadBasedPausing_WIN11> does not always work properly for WIN11 and
     % newer Intelchips (intel core Ultra 7). Therefore the the appraoch using the amount of open cmd windows is recommended.
@@ -459,6 +461,42 @@ for j = 1 : length(rootDirs)
             % the tibial torsion correction.
             tib_torsion_LeftMarkers = nan;
             tib_torsion_RightMarkers = nan;
+
+        case {'PLUS_COD_noArms'}
+            % Markerset of the Change of direction study of Gunter Kurz
+            markerSet = {'head_front_left','head_front_right', 'head_back_right', 'head_back_left', 'C7', 'B10', 'CLAV', 'acrom_left', ... % Huthöfer: Markerset from Salzburg
+                'acrom_right', ...
+                'SIPS_left', 'SIPS_right', 'SIAS_left', 'SIAS_right', 'LTHI', 'LTHI1', 'LTHI2', 'LTIB2', 'LTIB', 'LTIB1', ... 
+                'mal_lat_left', 'mal_med_left', 'cal_back_left', 'forefoot_med_left', 'toe2_left', 'forefood_lat_left', 'RTHI1', 'RTHI', 'RTHI2', 'RTHI3',...
+                'epi_med_right', 'epi_lat_right', 'epi_med_left', 'epi_lat_left', 'RTIB', 'RTIB2', 'RTIB1', 'mal_lat_right', 'mal_med_right', 'cal_back_right', 'toe_right', 'toe2_right', 'forefood_lat_right', ...
+                'forefoot_med_right', 'toe_left', 'sternum'};
+            % markerSet = {'head_front_left', 'head_front_right', 'head_back_right', 'head_back_left','acrom_right', 'acrom_left', 'C7', 'CLAV', 'B10', 'sternum', 'SIPS_right', 'SIPS_left', 'SIAS_left', 'SIAS_right', 'LTHI1', 'LTHI', 'LTHI2', 'epi_med_left', 'LTIB1', 'LTIB', 'LTIB2', 'mal_lat_left', 'mal_med_left', 'cal_back_left', 'forefood_lat_left', 'toe2_left', 'forefoot_med_left', 'toe_left', 'RTHI', 'RTHI2', 'RTHI3', 'epi_med_right', 'RTIB1', 'RTIB', 'RTIB2', 'mal_lat_right', 'mal_med_right', 'cal_back_right', 'forefood_lat_right', 'toe2_right', 'forefoot_med_right', 'toe_right', 'LUPA', 'Elbow_lat_left', 'Elbow_med_left', 'hand_lat_left', 'hand_med_left', 'hand_top_left', 'RUPA', 'hand_lat_right', 'hand_med_right', 'hand_top_right'};
+            % The markers used for the appendHelperMarkers function for the nonuniform pelvis scaling.
+            % Note: they always have to have the following order: {'LASI', 'RASI', 'LHJC', 'RHJC', 'SACR'} or {'LASI', 'RASI', 'LHJC', 'RHJC', 'LPSI', 'RPSI'}!
+            pelvisMarker4nonUniformScaling = {'SIPS_left', 'SIPS_right', 'LHJC', 'RHJC', 'SIAS_left', 'SIAS_right'}; % Huthöfer: SIAS and SIPS are intentionally the other way around as student assistents did this name mistake in the very beginning
+
+            % Markers used to calculate the tibial torsion
+            tib_torsion_LeftMarkers = {'LKNE', 'LKJC', 'LANK', 'LAJC'}; % Huthöfer: not needed
+            tib_torsion_RightMarkers = {'RKNE', 'RKJC', 'RANK', 'RAJC'}; % Huthöfer: not needed
+
+        case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
+            % Holder: SportsMarkerset from Salzburg
+            markerSet = {'HeadL','HeadR','HeadFront',...
+                'Chest','SpineThoracic2','SpineThoracic12','LShoulderTop','RShoulderTop',...
+                'WaistLFront','WaistL','WaistBack','WaistR','WaistRFront',...
+                'LThighFrontLow','LKneeOut','LKneeIn','LShinFrontHigh',...
+                'LAnkleOut','LHeelBack','LForefoot5','LForefoot2',...
+                'RThighFrontLow','RKneeOut','RKneeIn','RShinFrontHigh',...
+                'RAnkleOut','RHeelBack','RForefoot5','RForefoot2'};
+    %             'LTroch','LAnkleIn','LHJC','LKJC','LAJC',...
+    %             'RTroch','RAnkleIn','RHJC','RKJC','RAJC',...
+            % The markers used for the appendHelperMarkers function for the nonuniform pelvis scaling.
+            % Note: they always have to have the following order: {'LASI', 'RASI', 'LHJC', 'RHJC', 'SACR'} or {'LASI', 'RASI', 'LHJC', 'RHJC', 'LPSI', 'RPSI'}!
+            pelvisMarker4nonUniformScaling = {'WaistLFront','WaistRFront', 'LHJC', 'RHJC','WaistBack'};
+
+            % Markers used to calculate the tibial torsion
+            tib_torsion_LeftMarkers = {'LKneeOut', 'LKJC', 'LAnkleOut', 'LAJC'}; 
+            tib_torsion_RightMarkers = {'RKneeOut', 'RKJC', 'RAnkleOut', 'RAJC'};
 
     end
 

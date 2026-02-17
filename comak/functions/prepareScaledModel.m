@@ -62,6 +62,20 @@ switch labFlag
         model_right  = 'COMAK_FullBodyRight';
         model_left =  'COMAK_FullBodyLeft';
         scaleTemplate = 'LKHG_PiG_comakScaling'; % e.g. comakScalingLeft.xml
+
+    case 'PLUS_COD_noArms'
+        markerSetPath = '_PLUS_COD_noArms\PLUS_COD_noArms_MarkerSet_COMAK.xml';
+        path2ScaleFile = char(fullfile(path2GenericModels,'_PLUS_COD_noArms\'));
+        model_right  = 'COMAK_FullBody-noArmsRight';
+        model_left =  'COMAK_FullBody-noArmsLeft';
+        scaleTemplate = 'PLUS_COD_noArms_comakScaling'; % e.g. comakScalingLeft.xml
+
+    case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
+        markerSetPath = '_PLUS_pilotMC_noArms\PLUS_pilotMC_SportsMarkerset_noArms.xml';
+        path2ScaleFile = char(fullfile(path2GenericModels,'_PLUS_pilotMC_noArms\'));
+        model_right  = 'COMAK_FullBody-noArmsRight_26052025'; % % 'COMAK_FullBody-noArmsRight-lig5','COMAK_FullBody-noArmsRight-lig5_sgfKneeInd'
+        model_left =  'COMAK_FullBody-noArmsLeft_26052025'; % % 'COMAK_FullBody-noArmsLeft-lig5','COMAK_FullBody-noArmsLeft-lig5_sgfKneeInd'
+        scaleTemplate = 'PLUS_pilotMC_noArmsScaling'; % e.g. comakScalingLeft.xml
 end
 
 % Check if vars exist. If not raise error.
@@ -77,7 +91,8 @@ end
 path.genModels = char(fullfile(path2GenericModels));
 path.workingDirectory = char(workingDirectory);
 path.scaleFile = char(path2ScaleFile);
-path.static = strcat(rootWorkingDirectory, static_trc_fileName);
+% path.static = strcat(rootWorkingDirectory, static_trc_fileName);
+path.static = char(static_trc_fileName);
 path.markerSet = strcat(path.genModels, markerSetPath);
 path.geometry = strcat(workingDirectory, 'Geometry\');
 path.bin = path2bin;
@@ -139,7 +154,11 @@ if ~ForceModelCreation && sum(contains(modelNames, usedModel)) > 0
 
     % Set path to found model
     modelNames = modelNames(contains(modelNames, usedModel));
-    idxModel = find(~contains(modelNames,'only4ID')); % get the model used for COMAK not the one without the forceset for Inverse Dynamics.
+    if any(contains(modelNames,'WO')) % % % adapted (jh, 24.04.): Wrapping Objects (WO) were adapted, using this model
+        idxModel = find(and(~contains(modelNames,'only4ID'),contains(modelNames,'WO')));
+    else
+        idxModel = find(~contains(modelNames,'only4ID')); % get the model used for COMAK not the one without the forceset for Inverse Dynamics.
+    end
 
     if size(idxModel,2) > 1
         % Raise error if more than one model was found.

@@ -20,65 +20,65 @@ GRF_out= strcat(c3dfile_name,'.mot');
 switch labFlag
     case 'FHSTP-BIZ' % has only one plate
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi);  % rotate 90° around X
-        R3 = rotz(pi);      % rotate 180° around z
+        R1 = rotx(0.5*pi);  % rotate 90 degrees around X
+        R3 = rotz(pi);      % rotate 180 degrees around z
         R1 = R1(1:3,1:3);   % remove translation
         R3 = R3(1:3,1:3);   % remove translation
         R =  R3*R1;         % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(1*pi);     % rotate 180° y
-        R_FPb =  rotz(0.5*pi);  % rotate 180° z
+        R_FPa = roty(1*pi);     % rotate 180 degrees y
+        R_FPb =  rotz(0.5*pi);  % rotate 180 degrees z
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FPb = R_FPb(1:3,1:3); % remove translation
         R_FP = R_FPa*R_FPb;     % Total rotation
 
         % Rotate all force plates
-        RotMat = rotz(pi); % 180° rot matrix
+        RotMat = rotz(pi); % 180 degrees rot matrix
         R_FP1 = R_FP*RotMat(1:3,1:3); % turn
 
     case {'FHSTP', 'FHSTPnoArms', 'FHSTP-pyCGM', 'FHSTP_pyCGM2_5', 'FHSTP_pyCGM2_5noArms'} % has three plates
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi);  % rotate 90° around X
-        R2 = roty(pi);      % rotate 180° around y
-        R3 = rotz(pi);      % rotate 180° around z
+        R1 = rotx(0.5*pi);  % rotate 90 degrees around X
+        R2 = roty(pi);      % rotate 180  around y
+        R3 = rotz(pi);      % rotate 180 degrees around z
         R1 = R1(1:3,1:3);   % remove translation
         R2 = R2(1:3,1:3);   % remove translation
         R3 = R3(1:3,1:3);   % remove translation
         R = R3*R2*R1;       % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(pi);       % rotate 180° y
-        R_FPb =  rotz(0.5*pi);  % rotate 180° z
+        R_FPa = roty(pi);       % rotate 180 degrees y
+        R_FPb =  rotz(0.5*pi);  % rotate 180 degrees z
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FPb = R_FPb(1:3,1:3); % remove translation
         R_FP = R_FPa*R_FPb;     % Total rotation
 
         % Rotate all force plates
-        RotMat = rotz(pi);              % 180° rot matrix
+        RotMat = rotz(pi);              % 180 degrees rot matrix
         R_FP1 = R_FP*RotMat(1:3,1:3);   % turn
         R_FP2 = R_FP*RotMat(1:3,1:3);   % turn
         R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
 
     case {'OSS', 'OSSnoArms', 'OSS-pyCGM'} % has three to seven plates
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi);  % rotate 90° around x
-        R2 = roty(pi);      % rotate 180° around y
-        R3 = rotz(pi);      % rotate 180° around z
+        R1 = rotx(0.5*pi);  % rotate 90 degrees around x
+        R2 = roty(pi);      % rotate 180  around y
+        R3 = rotz(pi);      % rotate 180 degrees around z
         R1 = R1(1:3,1:3);   % remove translation
         R2 = R2(1:3,1:3);   % remove translation
         R3 = R3(1:3,1:3);   % remove translation
         R = R3*R2*R1;       % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(pi);       % rotate 180° y
-        R_FPb = rotz(0.5*pi);   % rotate 90° z
+        R_FPa = roty(pi);       % rotate 180 degrees y
+        R_FPb = rotz(0.5*pi);   % rotate 90 degrees z
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FPb = R_FPb(1:3,1:3); % remove translation
         R_FP = R_FPa*R_FPb;    % Total rotation
 
         % Rotate all force plates
-        RotMat = rotz(pi);  % turn 180°
+        RotMat = rotz(pi);  % turn 180 degrees
         R_FP1 = R_FP; %
         R_FP2 = R_FP*RotMat(1:3,1:3);   % turn
         R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
@@ -89,9 +89,9 @@ switch labFlag
 
     case {'FHCWnoArms', 'FHCW'} % has nine plates
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi);  % rotate 90° around x
-        R2 = roty(pi);      % rotate 180° around y
-        R3 = rotz(pi);      % rotate 180° around z
+        R1 = rotx(0.5*pi);  % rotate 90 degrees around x
+        R2 = roty(pi);      % rotate 180 degrees around y
+        R3 = rotz(pi);      % rotate 180 degrees around z
         R1 = R1(1:3,1:3);   % remove translation
         R2 = R2(1:3,1:3);   % remove translation
         R3 = R3(1:3,1:3);   % remove translation
@@ -99,12 +99,12 @@ switch labFlag
 
         % Rotation matrix force plate to coordinate system used in c3d file
         % level and ramp walking
-        R_FPa = roty(pi);       % rotate 180° y
+        R_FPa = roty(pi);       % rotate 180degrees y
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FPs56789 =  R_FPa;
         % stairs
-        R_FPa = roty(pi);       % rotate 180° y
-        R_FPb = rotz(0.5*pi);   % rotate 90° z
+        R_FPa = roty(pi);       % rotate 180degrees y
+        R_FPb = rotz(0.5*pi);   % rotate 90degrees z
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FPb = R_FPb(1:3,1:3); % remove translation
         R_FPs1234 = R_FPa*R_FPb;% Total rotation
@@ -115,7 +115,7 @@ switch labFlag
         R_FP3 = R_FPs1234;  % turn check
         R_FP4 = R_FPs1234;  % turn check
 
-        RotMatz = rotz(pi); % 180° rot matrix
+        RotMatz = rotz(pi); % 180degrees rot matrix
         R_FP5 = R_FPs56789*RotMatz(1:3,1:3);  % turn check
         R_FP6 = R_FPs56789*RotMatz(1:3,1:3);  % turn check
         R_FP7 = R_FPs56789*RotMatz(1:3,1:3);  % turn ok
@@ -124,19 +124,19 @@ switch labFlag
 
     case 'ISW' % has five plates
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi);  % rotate 90° around X
-        R3 = rotz(pi);      % rotate 180° around z
+        R1 = rotx(0.5*pi);  % rotate 90degrees around X
+        R3 = rotz(pi);      % rotate 180degrees around z
         R1 = R1(1:3,1:3);   % remove translation
         R3 = R3(1:3,1:3);   % remove translation
         R = R3*R1;          % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(pi);       % rotate 180° y
+        R_FPa = roty(pi);       % rotate 180degrees y
         R_FPa = R_FPa(1:3,1:3); % remove translation
         R_FP =  R_FPa;
 
         % Rotate all force plates
-        RotMatz = rotz(pi);             % 180° rot matrix
+        RotMatz = rotz(pi);             % 180degrees rot matrix
         R_FP1 = R_FP*RotMatz(1:3,1:3);  % turn
         R_FP2 = R_FP*RotMatz(1:3,1:3);  % turn
         R_FP3 = R_FP*RotMatz(1:3,1:3);  % turn
@@ -145,48 +145,138 @@ switch labFlag
 
     case 'FF'
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi); %rotate 90° around X
-        R3 = rotz(pi); %rotate 180° around z
+        R1 = rotx(0.5*pi); %rotate 90degrees around X
+        R3 = rotz(pi); %rotate 180degrees around z
         R1 = R1(1:3,1:3); %remove translation
         R3 = R3(1:3,1:3); %remove translation
         R = R3*R1; % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(1*pi); % rotate 180° y
+        R_FPa = roty(1*pi); % rotate 180degrees y
         R_FPa = R_FPa(1:3,1:3);
-        R_FPb =  rotz(0.5*pi); % rotate 180° z
+        R_FPb =  rotz(0.5*pi); % rotate 180degrees z
         R_FPb = R_FPb(1:3,1:3);
         R_FP = R_FPa*R_FPb;
 
         % Rotate all force plates
-        RotMatz = rotz(0.5*pi); % 90° rot matrix
+        RotMatz = rotz(0.5*pi); % 90degrees rot matrix
         R_FP1 = R_FP*RotMatz(1:3,1:3); % turn
 
-        RotMatz = rotz(1.5*pi); % 270° rot matrix
+        RotMatz = rotz(1.5*pi); % 270degrees rot matrix
         R_FP2 = R_FP*RotMatz(1:3,1:3); % turn
 
     case {'LKHG_Cleve', 'LKHG_PiG'} % has four plates
         % Rotation matrix from c3d to OpenSim for Markers
-        R1 = rotx(0.5*pi); %rotate 90° around X
-        R3 = rotz(pi); %rotate 180° around z
+        R1 = rotx(0.5*pi); %rotate 90degrees around X
+        R3 = rotz(pi); %rotate 180degrees around z
         R1 = R1(1:3,1:3); %remove translation
         R3 = R3(1:3,1:3); %remove translation
         R = R3*R1; % Total rotation
 
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = roty(1*pi); % rotate 180° y
+        R_FPa = roty(1*pi); % rotate 180degrees y
         R_FPa = R_FPa(1:3,1:3);
-        R_FPb =  rotz(0.5*pi); % rotate 180° z
+        R_FPb =  rotz(0.5*pi); % rotate 180degrees z
         R_FPb = R_FPb(1:3,1:3);
         R_FP = R_FPa*R_FPb;
 
         % Rotate all force plates
-        RotMat = rotz(1.5*pi); % 270° rot matrix
+        RotMat = rotz(1.5*pi); % 270degrees rot matrix
         R_FP1 = R_FP*RotMat(1:3,1:3);
         R_FP2 = R_FP*RotMat(1:3,1:3);
         R_FP3 = R_FP*RotMat(1:3,1:3);
         R_FP4 = R_FP*RotMat(1:3,1:3);
-    
+
+    case 'PLUS_COD_noArms'
+          % Rotation matrix from c3d to OpenSim for Markers
+          R1 = rotx(0.5*pi);  % rotate 90Â° around x
+          R2 = roty(pi);      % rotate 180Â° around y
+          R3 = rotz(pi);      % rotate 180Â° around z
+          R1 = R1(1:3,1:3);   % remove translation
+          R2 = R2(1:3,1:3);   % remove translation
+          R3 = R3(1:3,1:3);   % remove translation
+          R = R3*R2*R1;       % Total rotation
+
+          % Rotation matrix force plate to coordinate system used in c3d file
+          R_FPa = rotz(0.5*pi); % 90Â° Drehung um die Z-Achse (Y wird zu -X, X wird zu Y)
+          % R_FPb = rotz(0.5*pi);   % rotate 90Â° z % HuthÃ¶fer --> ursprÃ¼nglich: 
+          R_FPb = rotx(pi); % 180Â° Drehung um die X-Achse (Z wird von negativ zu positiv umgekehrt)
+          R_FPa = R_FPa(1:3,1:3); % remove translation
+          R_FPb = R_FPb(1:3,1:3); % remove translation
+          R_FP = R_FPa*R_FPb;     % Total rotation % % Reihenfolge ist wichtig, zuerst R_FPa, dann R_FPb
+
+          % Rotate all force plates
+          RotMat = rotz(0.5*pi);  % turn 90Â° um Z - RotMat is a Matrix for individualised turning of each ForcePlates - in this case. R_FP1
+          RotMat = RotMat(1:3,1:3);
+          R_FP1 = R_FP*RotMat; 
+          R_FP2 = R_FP; 
+          % R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
+          % R_FP4 = R_FP*RotMat(1:3,1:3);   % turn
+          % R_FP5 = R_FP*RotMat(1:3,1:3);   % turn
+          % R_FP6 = R_FP; %
+          % R_FP7 = R_FP; %
+
+    case 'PLUS_SportsMarkerset_noArms'
+        % Rotation matrix from c3d to OpenSim for Markers
+        R1 = rotx(0.5*pi);  % rotate 90Â° around x
+        R2 = roty(pi);      % rotate 180Â° around y
+        R3 = rotz(pi);      % rotate 180Â° around z
+        R1 = R1(1:3,1:3);   % remove translation
+        R2 = R2(1:3,1:3);   % remove translation
+        R3 = R3(1:3,1:3);   % remove translation
+        R = R3*R2*R1;       % Total rotation
+        
+        % Rotation matrix force plate to coordinate system used in c3d file
+        R_FPa = rotz(0.5*pi); % 90Â° Drehung um die Z-Achse (Y wird zu -X, X wird zu -Y)
+        R_FPb = rotx(pi); % 180Â° Drehung um die X-Achse (Z wird von negativ zu positiv umgekehrt)
+%         R_FPc = rotz(-0.5*pi); % ergÃ¤nzt jh
+        R_FPa = R_FPa(1:3,1:3); % remove translation
+        R_FPb = R_FPb(1:3,1:3); % remove translation
+%         R_FPc = R_FPc(1:3,1:3);
+        R_FP = R_FPa*R_FPb;     % Total rotation % % Reihenfolge ist wichtig, zuerst R_FPa, dann R_FPb
+        
+        % Rotate all force plates
+        RotMat = rotz(1.5*pi);  % turn 270Â° (geÃ¤ndert von 90Â°) um Z - RotMat is a Matrix for individualised turning of each ForcePlates - in this case. R_FP1
+        RotMat = RotMat(1:3,1:3);
+        R_FP1 = R_FP*RotMat; 
+        R_FP2 = R_FP*RotMat;  % *RotMat ergÃ¤nzt.
+        % R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP4 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP5 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP6 = R_FP; %
+        % R_FP7 = R_FP; %
+
+    case 'PLUS_SportsMarkerset_noArms_newFPs'
+        % Rotation matrix from c3d to OpenSim for Markers
+        R1 = rotx(0.5*pi);  % rotate 90Â° around x
+        R2 = roty(pi);      % rotate 180Â° around y
+        R3 = rotz(pi);      % rotate 180Â° around z
+        R1 = R1(1:3,1:3);   % remove translation
+        R2 = R2(1:3,1:3);   % remove translation
+        R3 = R3(1:3,1:3);   % remove translation
+        R = R3*R2*R1;       % Total rotation
+        
+        % Rotation matrix force plate to coordinate system used in c3d file
+        R_FPa = rotz(0.5*pi); % 90Â° Drehung um die Z-Achse (Y wird zu -X, X wird zu -Y)
+        R_FPb = rotx(pi); % 180Â° Drehung um die X-Achse (Z wird von negativ zu positiv umgekehrt)
+%         R_FPc = rotz(-0.5*pi); % ergÃ¤nzt jh
+        R_FPa = R_FPa(1:3,1:3); % remove translation
+        R_FPb = R_FPb(1:3,1:3); % remove translation
+%         R_FPc = R_FPc(1:3,1:3);
+        R_FP = R_FPa*R_FPb;     % Total rotation % % Reihenfolge ist wichtig, zuerst R_FPa, dann R_FPb
+        
+        % Rotate all force plates
+        RotMat = rotz(1.5*pi);  % turn 270Â° (geÃ¤ndert von 90Â°) um Z - RotMat is a Matrix for individualised turning of each ForcePlates - in this case. R_FP1
+        RotMat = RotMat(1:3,1:3);
+        R_FP1 = R_FP*RotMat; 
+        R_FP2 = R_FP*RotMat;  % *RotMat ergÃ¤nzt.
+        R_FP3 = R_FP*RotMat;  % *RotMat ergÃ¤nzt.
+        % R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP4 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP5 = R_FP*RotMat(1:3,1:3);   % turn
+        % R_FP6 = R_FP; %
+        % R_FP7 = R_FP; %
+		
     otherwise
         warning('Unknown labFlag: %s in c3d2OpenSim. Skript paused!', labFlag);
         pause()
@@ -204,8 +294,13 @@ f = btkGetForcePlatforms(acq);
 
 % Get c3d cam delta.
 metaData = btkGetMetaData(acq);
-cam_rate = metaData.children.TRIAL.children.CAMERA_RATE.info.values(1,1);
-startfield = metaData.children.TRIAL.children.ACTUAL_START_FIELD.info.values(1,1);
+% cam_rate = metaData.children.TRIAL.children.CAMERA_RATE.info.values(1,1);
+% startfield = metaData.children.TRIAL.children.ACTUAL_START_FIELD.info.values(1,1);
+
+% % % holder: adapted (23.10.2024)
+cam_rate = metaData.children.POINT.children.RATE.info.values(1,1);
+startfield = metaData.children.POINT.children.DATA_START.info.values(1,1);
+% % % 
 delta = 1/cam_rate * startfield;
 
 % Get all Marker data.
@@ -246,8 +341,12 @@ try
         SACR = markers_out.(pelvisMarker{5});
     end
 
-    midAsis = (markers_out.(pelvisMarker{1}) + markers_out.(pelvisMarker{2}))./2;
-    faceDirection = midAsis(1,1:2) - SACR(1,1:2); % only x and y
+    % midAsis = (markers_out.(pelvisMarker{1}) + markers_out.(pelvisMarker{2}))./2;
+    % faceDirection = midAsis(1,1:2) - SACR(1,1:2); % only x and y
+    % % % holder: adapted (23.10.2024)
+    midAsis = (markers_out.WaistLFront + markers_out.WaistRFront)./2; 
+    faceDirection = midAsis(1,1:2) - markers_out.WaistBack(1,1:2);
+    % % %    
     x_faceDir = faceDirection(1);
     y_faceDir = faceDirection(2);
 
@@ -362,6 +461,16 @@ for i = 1:nFP
     % Low pass filter of GRF.
     fc = 12;
     [a,b] = butter(4,fc/(AnalogFrameRate*0.5),'low');
+    % % added by jh (10.11.2025)
+    if any(isnan(Fx_raw)) || any(isnan(Fy_raw)) || any(isnan(Fz_raw))
+        Fx_raw(isnan(Fx_raw)) = 0;
+        Fy_raw(isnan(Fy_raw)) = 0;
+        Fz_raw(isnan(Fz_raw)) = 0;
+        Mx_raw(isnan(Mx_raw)) = 0;
+        My_raw(isnan(My_raw)) = 0;
+        Mz_raw(isnan(Mz_raw)) = 0;
+    end
+    % % %  
 
     Fx = filtfilt(a,b,Fx_raw);
     Fy = filtfilt(a,b,Fy_raw);
