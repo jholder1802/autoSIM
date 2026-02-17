@@ -21,7 +21,7 @@ function CpuLoadBasedPausing_WIN11(thresholdCpuLoad, waitInterval, maxWaitSec)
         waitInterval = 30; % default: 30 s between checks
     end
     if nargin < 3 || isempty(maxWaitSec) || maxWaitSec <= 0
-        maxWaitSec = 60*60;  % no hard timeout by default
+        maxWaitSec = 60*60*2;  % no hard timeout by default
     end
 
     % Sanity clamp
@@ -66,9 +66,12 @@ function CpuLoadBasedPausing_WIN11(thresholdCpuLoad, waitInterval, maxWaitSec)
         % 3) Check max total wait time
         % -----------------------------------------------------------------
         if toc(tStart) > maxWaitSec
-            warning(['Maximum wait time (%.1f s) exceeded. ', ...
+            warning(['Maximum wait time of (%.1f s) exceeded. ', ...
                      'Please close all crashed cmd windows and proceed by pressing any button.'], maxWaitSec);
             pause();
+			% All cmd windows will be forced to close.
+			% closeCmdWindows();
+			
             break;
         end
 
