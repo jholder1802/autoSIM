@@ -5,7 +5,7 @@
 *.png
 
 # # Persönliche Daten
-data/
+_data/
 local_config/
 
 # Temporäre MATLAB Dateien
