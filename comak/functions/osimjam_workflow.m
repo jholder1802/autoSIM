@@ -92,7 +92,7 @@ switch labFlag
         path2setupFiles = fullfile(path2setupFiles,'Models\PLUS_COD_noArms\');
 
     case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
-        path2setupFiles = fullfile(path2setupFiles,'Models\PLUS_pilotMC_noArms\');
+        path2setupFiles = fullfile(path2setupFiles,'Models\_PLUS_pilotMC_noArms\');
 
 end
 

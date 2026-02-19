@@ -59,7 +59,14 @@ repoPaths.commonFiles = fullfile(strcat(repoPath,'\..\_commonFiles'));
 
 % ------------ START SUPER LOOP -------------------------------------------
 % Your database folder to analyze:
-rootDirs = {'C:\Users\b1097908\Documents\GitHub\autoSIM\_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04'};
+if strcmp(repoPath(end),'\')
+    parts = strsplit(repoPath(1:end-1), '\');
+else
+    parts = strsplit(repoPath, '\');
+end
+startpath = strjoin(parts(1:end-1), '\');
+
+rootDirs = {fullfile(startpath,'_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04')};
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -206,7 +213,7 @@ for j = 1 : length(rootDirs)
     varNameKneeAngle_c3d.L = 'LKneeAngles';             % default = 'LKneeAngles'; this depends on how the variable is defined in your *.c3d files.
     varNameKneeAngle_c3d.posFront = 2;                  % default = 2; You can specify the position (column) of the frontal plane data in your *.c3d files.
     varNameKneeAngle_c3d.posTrans = 3;                  % default = 3; You can specify the position (column) of the transverse plane data in your *.c3d files (later needed for TT).
-    useStatic4FrontAlignmentAsFallback = true;         % default = false; true or false
+    useStatic4FrontAlignmentAsFallback = false;         % default = false; true or false
     tf_angle_fromSource = 'false';                      % default = 'false'; 'false', 'fromStatic', 'fromExtDataFile', 'manual'
     tf_angle_r = 0;                                     % default = 0
     tf_angle_l = 0;                                     % default = 0
@@ -271,7 +278,7 @@ for j = 1 : length(rootDirs)
     %%----- Generate new models -----------------------------------------------
     % Force Model Creation? If set to true, the workflow will always scale and
     % generate a new model. Otherwise, a model will be only created if no appropriate models are found.
-    ForceModelCreation = false; % default = true; true or false
+    ForceModelCreation = true; % default = true; true or false
 
     %%----- Allow autorestart of Matlab ---------------------------------------
     % This function might be helpful for large-scale simulation studies and if
