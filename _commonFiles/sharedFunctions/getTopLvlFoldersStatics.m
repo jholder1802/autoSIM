@@ -27,6 +27,8 @@ subFolders = files(dirFlags); % A structure with extra info.
 
 % Get only the unique folder names into a cell array.
 tmpFolders = fullfile(unique({subFolders.folder})); % Start at 3 to skip . and ..
+% % % add for 01_2026_R2S_ACL that only static folder is searched.
+tmpFolders = tmpFolders(contains(tmpFolders,'Static'));
 
 % Add trailing '\' to the paths.
 for j = 1:length(tmpFolders)

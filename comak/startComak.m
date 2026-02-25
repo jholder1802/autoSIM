@@ -66,7 +66,24 @@ else
 end
 startpath = strjoin(parts(1:end-1), '\');
 
-rootDirs = {fullfile(startpath,'_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04')};
+% rootDirs = {fullfile(startpath,'_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04'),...
+%             fullfile(startpath,'_data\01_2026_R2S_ACL\Buchinger_AB_09\2025-04-10')};
+
+subjectDirs = dir(fullfile(startpath,'_data\01_2026_R2S_ACL'));
+subjectDirs = subjectDirs(~contains({subjectDirs.name},'.'));
+
+rootDirs = [];
+idxDir = 0;
+for n = 1:length(subjectDirs)
+    sessionDir = dir(fullfile(subjectDirs(n).folder,subjectDirs(n).name));
+    sessionDir = sessionDir(~contains({sessionDir.name},'.'));
+    for m = 1:length(sessionDir)
+        idxDir = idxDir + 1;
+        rootDirs{idxDir} = fullfile(sessionDir(m).folder,sessionDir(m).name);
+    end; clearvars m;
+end; clearvars n;
+
+rootDirs = rootDirs(contains(rootDirs,{'Clementi'}));
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -74,6 +91,7 @@ rootDirs = {fullfile(startpath,'_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04'
 % 'E:\OSS3\', ...
 % 'E:\OSS4\', ...
 % 'E:\OSS5\', ...
+%% 
 % 'E:\OSS6\', ...
 % 'E:\OSS7\'};
 
@@ -109,9 +127,9 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = fullfile(rootDirs,'Counter-movementjumpsession\'); % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
-            staticC3dFiles = fullfile(rootDirs,'Staticandfunctionalsession\Static 1.c3d'); % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
-
+            workingDirectories = {fullfile(rootDirectory,'Counter-movementjumpsession\')}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
+            staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
         case 2
             %----- Option #2 ----------------------------------------------------------
             % Create workingDirectories and staticC3dFiles automatically and store a local file in the rootDirectory for later usage.
@@ -121,7 +139,8 @@ for j = 1 : length(rootDirs)
             % inputvar (e.g., 'static') OR by 'byEnfDescription' which will look for the file based on the description in the *.enf file. The latter is the standard for the OSS.
             % Note that the third input is a string pattern for which the script would look at the end of potential static trials, i.e. "A" for "StandA" trials.
             %---
-            [workingDirectories, staticC3dFiles] = getTopLvlFoldersStatics(rootDirectory, 'byC3dFilePatternName', 'Static', ''); % default (OSS only!) = 'byEnfDescription', 'Stand', '';  default (general) = 'byC3dFilePatternName', 'Static', '';
+            [workingDirectories, staticC3dFiles] = getTopLvlFoldersStatics(rootDirectory,...
+                'byC3dFilePatternName', 'Static', ''); % default (OSS only!) = 'byEnfDescription', 'Stand', '';  default (general) = 'byC3dFilePatternName', 'Static', '';
 
         case 3
             %----- Option #3 ----------------------------------------------------------
@@ -142,7 +161,7 @@ for j = 1 : length(rootDirs)
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'Counter-Movement Jump'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    conditions =  {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
     % % ,'Gait','Running','Counter-Movement Jump Left',...
     %    'Drop Jump Bilateral','Single-Leg Jump Left','Squatting','Squatting Left'
 
@@ -199,7 +218,7 @@ for j = 1 : length(rootDirs)
 
     %%----- Time Normalization ------------------------------------------------
     % Normalize to 100% activity time (e.g. gait cycle). As of today I do think this only affects the JAM setup file
-    timeNorm = 'true'; % default = 'true'; 'true' or 'false'
+    timeNorm = 'false'; % default = 'true'; 'true' or 'false'
 
     %%----- Adjust Tibiofemoral Angle -----------------------------------------
     % Define if the model's frontal tibio-femoral angle should be adjusted, in degrees, Varus(+) / Valgus(-)

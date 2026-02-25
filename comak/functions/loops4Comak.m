@@ -220,7 +220,6 @@ for i_wd = i_wd : length(workingDirectories)
                         path2enf = (InputData.(trials{i}).enfPath);
                         name = (InputData.(trials{i}).name);
 
-
                         % Prepare (scale) the models for both body sides
                         % and also scale contact geometry manually, because these are not scaled by opensim (seems to be a bug).
                         switch side

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <OpenSimDocument Version="40000">
-	<Model name="lenhart2015">
+	<Model name="lenhart2015-l">
 		<defaults>
 			<Millard2012EquilibriumMuscle name="default">
 				<!--The set of points defining the path of the actuator.-->
@@ -152,7 +152,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0621844 0.0521784 0.0849056</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.062184400000000001 0.0521784 0.084905599999999998</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="IL_at_brim_r">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -177,7 +178,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0656524 0.0705256 0.0849056</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0656524 0.070525599999999994 0.084905599999999998</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="Gmax_at_pelvis_r">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -202,7 +204,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0454048 0.0466339 0.0693816</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.045404800000000002 0.046633899999999999 0.069381600000000002</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="PS_at_brim_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -227,7 +230,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0621844 0.0521784 0.0849056</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.062184400000000001 0.0521784 0.084905599999999998</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="IL_at_brim_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -252,7 +256,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0656524 0.0705256 0.0849056</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0656524 0.070525599999999994 0.084905599999999998</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="Gmax_at_pelvis_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -277,7 +282,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0454048 0.0466339 0.0693816</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.045404800000000002 0.046633899999999999 0.069381600000000002</dimensions>
 							</WrapEllipsoid>
 						</objects>
 					</WrapObjectSet>
@@ -344,7 +350,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0152661 0.0647653 0.0194296</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.015266099999999999 0.064765299999999998 0.019429600000000002</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="AL_at_femshaft_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -369,7 +376,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0185969 0.0925218 0.0166539</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0185969 0.092521800000000001 0.016653899999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="AMprox_at_femshaft_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -394,7 +402,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0195221 0.0647653 0.029607</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.019522100000000001 0.064765299999999998 0.029607000000000001</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="AMmid_at_femshaft_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -419,7 +428,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0197997 0.111026 0.0286818</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0197997 0.111026 0.0286818</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="AMdist_at_femshaft_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -444,7 +454,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0201698 0.185044 0.0198922</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.020169800000000002 0.18504399999999999 0.019892199999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="AMisch_at_condyles_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -469,7 +480,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0462609 0.222052 0.0371938</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.046260900000000001 0.222052 0.037193799999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="PECT_at_femshaft_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -494,7 +506,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0153586 0.0462609 0.0121204</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0153586 0.046260900000000001 0.0121204</dimensions>
 							</WrapEllipsoid>
 							<WrapCylinder name="KnExt_at_fem_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -575,7 +588,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0277566 0.0231305 0.138783</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.027756599999999999 0.023130499999999998 0.13878299999999999</dimensions>
 							</WrapEllipsoid>
 						</objects>
 					</WrapObjectSet>
@@ -732,7 +746,8 @@
 								<translation>0.00050000000000000001 -0.0093892323599999994 -0.00048233</translation>
 								<!--The name of quadrant over which the wrap object is active. For example, '+x' or '-y' to set the sidedness of the wrapping.-->
 								<quadrant>all</quadrant>
-								<dimensions> 0.005 0.008 0.012</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.0050000000000000001 0.0080000000000000002 0.012</dimensions>
 							</WrapEllipsoid>
 						</objects>
 					</WrapObjectSet>
@@ -819,7 +834,8 @@
 								<translation>0.001 -0.034599999999999999 0.018700000000000001</translation>
 								<!--The name of quadrant over which the wrap object is active. For example, '+x' or '-y' to set the sidedness of the wrapping.-->
 								<quadrant>all</quadrant>
-								<dimensions> 0.03 0.018 0.012</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.029999999999999999 0.017999999999999999 0.012</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="Med_LigP_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -830,7 +846,8 @@
 								<translation>-0.0104 -0.031399999999999997 0.022700000000000001</translation>
 								<!--The name of quadrant over which the wrap object is active. For example, '+x' or '-y' to set the sidedness of the wrapping.-->
 								<quadrant>all</quadrant>
-								<dimensions> 0.025 0.0054 0.0053</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.025000000000000001 0.0054000000000000003 0.0053</dimensions>
 							</WrapEllipsoid>
 						</objects>
 					</WrapObjectSet>
@@ -851,6 +868,7 @@
 						<!--Scale factors in X, Y, Z directions respectively.-->
 						<scale_factors>0.20000000000000001 0.20000000000000001 0.20000000000000001</scale_factors>
 					</FrameGeometry>
+					<!--List of geometry attached to this Frame. Note, the geometry are treated as fixed to the frame and they share the transform of the frame when visualized-->
 					<attached_geometry>
 						<Mesh name="tibia_l_geom_1">
 							<!--Path to a Component that satisfies the Socket 'frame' of type Frame.-->
@@ -913,7 +931,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0362976 0.0640249 0.0537406</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.036297599999999999 0.064024899999999996 0.053740599999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="SM_at_condyles_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -938,7 +957,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.035491 0.0606977 0.0493042</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.035491000000000002 0.0606977 0.049304199999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapEllipsoid name="ST_at_condyles_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -963,7 +983,8 @@
 										<representation>3</representation>
 									</SurfaceProperties>
 								</Appearance>
-								<dimensions> 0.0428513 0.0695704 0.0576729</dimensions>
+								<!--The length of the radii of the ellipsoid.-->
+								<dimensions>0.042851300000000002 0.069570400000000004 0.057672899999999999</dimensions>
 							</WrapEllipsoid>
 							<WrapCylinder name="BFLH_at_gastroc_l">
 								<!--Whether or not the WrapObject is considered active in computing paths-->
@@ -3270,7 +3291,7 @@
 							<!--Flag indicating whether or not the values of the coordinates should be limited to the range, above.-->
 							<clamped>true</clamped>
 							<!--Flag indicating whether or not the values of the coordinates should be constrained to the current (e.g. default) value, above.-->
-							<locked>false</locked> <!--Huthöfer - 10.01.2025: Locked true to control for degrees of freedom in combination with high reserve actuators
+							<locked>false</locked>
 							<!--Flag indicating whether or not the values of the coordinates should be prescribed according to the function above. It is ignored if the no prescribed function is specified.-->
 							<prescribed>false</prescribed>
 						</Coordinate>
@@ -3280,9 +3301,9 @@
 							<!--The minimum and maximum values that the coordinate can range between. Rotational coordinate range in radians and Translational in meters.-->
 							<range>-0.20000000000000001 0.20000000000000001</range>
 							<!--Flag indicating whether or not the values of the coordinates should be limited to the range, above.-->
-							<clamped>true</clamped> 
+							<clamped>true</clamped>
 							<!--Flag indicating whether or not the values of the coordinates should be constrained to the current (e.g. default) value, above.-->
-							<locked>false</locked> <!--Huthöfer - 10.01.2025: Locked true to control for degrees of freedom in combination with high reserve actuators
+							<locked>false</locked>
 							<!--Flag indicating whether or not the values of the coordinates should be prescribed according to the function above. It is ignored if the no prescribed function is specified.-->
 							<prescribed>false</prescribed>
 						</Coordinate>
@@ -3294,7 +3315,7 @@
 							<!--Flag indicating whether or not the values of the coordinates should be limited to the range, above.-->
 							<clamped>true</clamped>
 							<!--Flag indicating whether or not the values of the coordinates should be constrained to the current (e.g. default) value, above.-->
-							<locked>false</locked> <!--Huthöfer - 10.01.2025: Locked true to control for degrees of freedom in combination with high reserve actuators
+							<locked>false</locked>
 							<!--Flag indicating whether or not the values of the coordinates should be prescribed according to the function above. It is ignored if the no prescribed function is specified.-->
 							<prescribed>false</prescribed>
 						</Coordinate>
@@ -3878,7 +3899,7 @@
 							<!--Flag indicating whether or not the values of the coordinates should be limited to the range, above.-->
 							<clamped>false</clamped>
 							<!--Flag indicating whether or not the values of the coordinates should be constrained to the current (e.g. default) value, above.-->
-							<locked>true</locked>
+							<locked>false</locked>
 							<!--Flag indicating whether or not the values of the coordinates should be prescribed according to the function above. It is ignored if the no prescribed function is specified.-->
 							<prescribed>false</prescribed>
 						</Coordinate>
@@ -8158,8 +8179,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.03075</slack_length>
 				</Blankevoort1991Ligament>
@@ -8204,8 +8225,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.032678200000000053</slack_length>
 				</Blankevoort1991Ligament>
@@ -8250,8 +8271,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.037121399999999999</slack_length>
 				</Blankevoort1991Ligament>
@@ -8296,8 +8317,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.033244299999999997</slack_length>
 				</Blankevoort1991Ligament>
@@ -8342,8 +8363,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.03727980000000005</slack_length>
 				</Blankevoort1991Ligament>
@@ -8388,8 +8409,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.072319800000000004</slack_length>
 				</Blankevoort1991Ligament>
@@ -8434,8 +8455,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.089798199999999995</slack_length>
 				</Blankevoort1991Ligament>
@@ -8480,8 +8501,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.07135730000000004</slack_length>
 				</Blankevoort1991Ligament>
@@ -8526,8 +8547,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.082269200000000001</slack_length>
 				</Blankevoort1991Ligament>
@@ -8572,8 +8593,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.078137600000000043</slack_length>
 				</Blankevoort1991Ligament>
@@ -8618,8 +8639,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
-					<linear_stiffness>2500</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.074108599999999886</slack_length>
 				</Blankevoort1991Ligament>
@@ -8653,8 +8674,8 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
-					<linear_stiffness>4100</linear_stiffness> 
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
+					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.025109099999999964</slack_length>
 				</Blankevoort1991Ligament>
@@ -8688,7 +8709,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.022989900000000001</slack_length>
@@ -8723,7 +8744,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.027929599999999999</slack_length>
@@ -8758,7 +8779,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.025343200000000045</slack_length>
@@ -8793,7 +8814,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.024460599999999999</slack_length>
@@ -8828,7 +8849,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.0251071</slack_length>
@@ -8863,7 +8884,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.034170999999999951</slack_length>
@@ -8898,7 +8919,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.029948600000000044</slack_length>
@@ -8933,7 +8954,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.030236200000000001</slack_length>
@@ -8968,7 +8989,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.03458249999999994</slack_length>
@@ -9003,7 +9024,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.033822100000000001</slack_length>
@@ -9038,7 +9059,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 820 to 1230 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4100</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.033587800000000001</slack_length>
@@ -9073,7 +9094,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 900 to 1350 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.034199400000000046</slack_length>
@@ -9108,7 +9129,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 900 to 1350 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.031248100000000001</slack_length>
@@ -9143,7 +9164,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 900 to 1350 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.032548700000000041</slack_length>
@@ -9178,7 +9199,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 900 to 1350 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.033441499999999999</slack_length>
@@ -9213,7 +9234,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 900 to 1350 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.033391700000000003</slack_length>
@@ -9248,7 +9269,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 300 to 450 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.034338300000000002</slack_length>
@@ -9283,7 +9304,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 300 to 450 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.035725999999999952</slack_length>
@@ -9318,7 +9339,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 300 to 450 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.030600500000000055</slack_length>
@@ -9353,7 +9374,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 300 to 450 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.03965140000000001</slack_length>
@@ -9388,7 +9409,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 300 to 450 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>4500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.035097200000000044</slack_length>
@@ -9423,7 +9444,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 600 to 900 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>3000</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.049164899999999997</slack_length>
@@ -9458,7 +9479,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 600 to 900 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>3000</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.05570479999999995</slack_length>
@@ -9493,7 +9514,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 600 to 900 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>3000</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.053296699999999947</slack_length>
@@ -9528,7 +9549,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 600 to 900 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>3000</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.058164199999999951</slack_length>
@@ -10302,7 +10323,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.029244500000000045</slack_length>
@@ -10348,7 +10369,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.029916999999999999</slack_length>
@@ -10394,7 +10415,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.02965190000000005</slack_length>
@@ -10440,7 +10461,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.030532799999999943</slack_length>
@@ -10486,7 +10507,7 @@
 							<color>0.1202 0.70540000000000003 0.1318</color>
 						</Appearance>
 					</GeometryPath>
-					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N). Huthöfer 22.01.2025: increased for 50% from 500 to 750 -->
+					<!--The slope of the linear region of the force-strain curve. Units of force/strain (N).-->
 					<linear_stiffness>2500</linear_stiffness>
 					<!--The length at which ligament begins developing tension. Units of m.-->
 					<slack_length>0.029097899999999954</slack_length>
@@ -11150,7 +11171,7 @@
 					<rest_length>0</rest_length>
 					<!--Damping constant.-->
 					<viscosity>100</viscosity>
-				</SpringGeneralizedForce>
+				</SpringGeneralizedForce>
 				<SpringGeneralizedForce name="knee_ty_l">
 					<!--List of components that this component owns and serializes.-->
 					<components />
@@ -11308,8 +11329,7 @@
 		</ForceSet>
 		<!--Markers in the model.-->
 		<MarkerSet name="markerset">
-			<objects>
-			</objects>
+			<objects />
 		</MarkerSet>
 		<!--Geometry to be used in contact forces.-->
 		<ContactGeometrySet name="contactgeometryset">

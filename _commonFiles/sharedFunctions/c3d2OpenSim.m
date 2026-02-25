@@ -257,7 +257,8 @@ switch labFlag
         R = R3*R2*R1;       % Total rotation
         
         % Rotation matrix force plate to coordinate system used in c3d file
-        R_FPa = rotz(0.5*pi); % 90° Drehung um die Z-Achse (Y wird zu -X, X wird zu -Y)
+        %{
+        R_FPa = rotz(1.5*pi); % 90° Drehung um die Z-Achse (Y wird zu -X, X wird zu -Y)
         R_FPb = rotx(pi); % 180° Drehung um die X-Achse (Z wird von negativ zu positiv umgekehrt)
 %         R_FPc = rotz(-0.5*pi); % ergänzt jh
         R_FPa = R_FPa(1:3,1:3); % remove translation
@@ -266,17 +267,32 @@ switch labFlag
         R_FP = R_FPa*R_FPb;     % Total rotation % % Reihenfolge ist wichtig, zuerst R_FPa, dann R_FPb
         
         % Rotate all force plates
-        RotMat = rotz(1.5*pi);  % turn 270° (geändert von 90°) um Z - RotMat is a Matrix for individualised turning of each ForcePlates - in this case. R_FP1
+        RotMat = rotz(0.5*pi);  % turn 270° (geändert von 90°) um Z - RotMat is a Matrix for individualised turning of each ForcePlates - in this case. R_FP1
         RotMat = RotMat(1:3,1:3);
         R_FP1 = R_FP*RotMat; 
         R_FP2 = R_FP*RotMat;  % *RotMat ergänzt.
-        R_FP3 = R_FP*RotMat;  % *RotMat ergänzt.
+        % R_FP3 = R_FP*RotMat;  % *RotMat ergänzt.
         % R_FP3 = R_FP*RotMat(1:3,1:3);   % turn
         % R_FP4 = R_FP*RotMat(1:3,1:3);   % turn
         % R_FP5 = R_FP*RotMat(1:3,1:3);   % turn
         % R_FP6 = R_FP; %
         % R_FP7 = R_FP; %
+        %}
 		
+        % Define Force Plate rotations
+        R_FP1 = roty(pi);       
+        R_FP1 = R_FP1(1:3,1:3);
+        
+        R_FP2a = rotx(pi);
+        R_FP2b = rotz(-0.5*pi);
+        R_FP2  = R_FP2b * R_FP2a;
+        R_FP2  = R_FP2(1:3,1:3);
+        
+        R_FP3a = rotx(pi);
+        R_FP3b = rotz(-0.5*pi);
+        R_FP3  = R_FP3b * R_FP3a;
+        R_FP3  = R_FP3(1:3,1:3);
+
     otherwise
         warning('Unknown labFlag: %s in c3d2OpenSim. Skript paused!', labFlag);
         pause()
@@ -486,6 +502,15 @@ for i = 1:nFP
     COPx = (-1*My + dz*Fx)./Fz;
     COPy = (Mx + dz*Fy)./Fz;
     Tz = Mz + COPy.*Fx - COPx.*Fy;
+    
+    % Ergänzung - Jana 19.02.2026
+    if i == 1
+        R_FP = R_FP1;
+    elseif i == 2
+        R_FP = R_FP2;
+    elseif i == 3
+        R_FP = R_FP3;
+    end
 
     % Rotate FP info to correct coordinate system.
     Fsel = [Fx Fy Fz];                   % forces
