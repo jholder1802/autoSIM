@@ -238,7 +238,7 @@ path.jointMechanicsAnalysis = xmlFile;
 
 % Change xml nodes
 changeXML(xmlFile,'model_file',path.scaledModel,1);
-changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName, '_states.sto'),1);
+changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName,'_states.sto'),1);
 changeXML(xmlFile,'results_directory', path.COMAKresultsJAM,1);
 changeXML(xmlFile,'results_file_basename', statesFileName,1);
 changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),1); % trialInfo.startTime
@@ -254,8 +254,8 @@ changeXML(xmlFile,'contact_outputs','all',1);
 changeXML(xmlFile,'contact_mesh_properties','all',1);
 changeXML(xmlFile,'ligaments', jamSettings.ligaments,1);
 changeXML(xmlFile,'ligament_outputs','all',1);
-changeXML(xmlFile,'muscles','none',1);
-changeXML(xmlFile,'muscle_outputs','none',1);
+changeXML(xmlFile,'muscles','all',1);
+changeXML(xmlFile,'muscle_outputs','all',1);
 % Add bodyside to the body paths
 attachedGeometryBodies = strrep(jamSettings.attachedGeometryBodies, '#', side(1));
 changeXML(xmlFile,'attached_geometry_bodies', attachedGeometryBodies,1);
@@ -321,6 +321,7 @@ changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),4);
 changeXML(xmlFile,'end_time',num2str(trialInfo.endTime),4);
 changeXML(xmlFile,'forces_file',strcat(path.COMAKresultsTool,statesFileName,'_force.sto'),1);
 changeXML(xmlFile,'external_loads_file',path.extLoadFile,1);
+changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName,'_states.sto'),1);
 changeXML(xmlFile,'coordinates_file',strcat(path.COMAKresultsIK,trialInfo.fileName,'_IK_motion_file.mot'),1);
 changeXML(xmlFile,'lowpass_cutoff_frequency_for_coordinates','6',1);
 
@@ -353,21 +354,21 @@ line6 = (['move err.log',' ', path.COMAKresults, [trialInfo.fileName,'_comak-IK_
 % Run system command similar to the batch file
 strCOMAK = 'REM Run COMAK - Tool';
 line7 = (['%BIN%\comak',' ', '%BIN%\jam_plugin.dll',' ', path.currentCOMAKsetting]);
-line8 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_comak-Tool_out.txt']]);
-line9 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_comak-Tool_err.txt']]);
+line8 = (['move out.log',' ', path.COMAKresults, [statesFileName,'comak-Tool_out.txt']]);
+line9 = (['move err.log',' ', path.COMAKresults, [statesFileName,'comak-Tool_err.txt']]);
 
 %% Run Joint Mechanics Analysis
 % Run system command similar to the batch file
 strJAM = 'REM Run Joint Mechanics Analysis';
 line10 = (['%BIN%\joint-mechanics',' ', '%BIN%\jam_plugin.dll',' ', path.jointMechanicsAnalysis]);
-line11 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_JAM_out.txt',]]);
-line12 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_JAM_err.txt',]]);
+line11 = (['move out.log',' ', path.COMAKresults, [statesFileName,'JAM_out.txt',]]);
+line12 = (['move err.log',' ', path.COMAKresults, [statesFileName,'JAM_err.txt',]]);
 
 %% Inverse Dynamics OpenSim
 strID = 'REM Inverse Dynamics - Open Sim';
 line13 = (['%OPENSIM%\opensim-cmd -L',' ', '%BIN%\jam_plugin.dll run-tool',' ', path.OpenSimInverseDynamcis]);
-line14 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_OpenSim-Inverse-Dynamics_out.txt']]);
-line15 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_OpenSim-Inverse-Dynamics_err.txt']]);
+line14 = (['move out.log',' ', path.COMAKresults, [statesFileName,'OpenSim-Inverse-Dynamics_out.txt']]);
+line15 = (['move err.log',' ', path.COMAKresults, [statesFileName,'OpenSim-Inverse-Dynamics_err.txt']]);
 
 %% Analyze
 str_AN = 'REM ANALYZE - Open Sim';

@@ -11,7 +11,7 @@ threshold=50; % % jh (14.04.2025): threshold 20 N
 % Decide if walking trial or SEBT trial
 switch condition
     % % % Walking
-    case {'Gait','Running'}
+    case {'Gait','Running','Cutting Left','Cutting Right'}
         fp_contact = time((dat>threshold));
         IC = fp_contact(1);
         TO = fp_contact(end);
@@ -19,14 +19,19 @@ switch condition
 
         % contralateral TO % IC contralateral      
         % % jh (04.02.25): adapted for Gait
-        if i == 2 % % contralateral leg is on FP(i == 1)
-            dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(1),'_vy')));
-        elseif i == 1 % % contralateral leg is on FP(i == 2)
-            dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(2),'_vy')));
+        if isempty(FPs{1}) || isempty(FPs{2})
+            cIC = IC;
+            cTO = TO;
+        else
+            if i == 2 % % contralateral leg is on FP(i == 1)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(1),'_vy')));
+            elseif i == 1 % % contralateral leg is on FP(i == 2)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(2),'_vy')));
+            end
+            fp_contact_contra= time((dat_fp_contra>threshold));
+            cIC = fp_contact_contra(1);
+            cTO = fp_contact_contra(end);
         end
-        fp_contact_contra= time((dat_fp_contra>threshold));
-        cIC = fp_contact_contra(1);
-        cTO = fp_contact_contra(end);
         
         % Get events via c3d events and mot file
         % IC ipsilateral
@@ -142,8 +147,12 @@ end
 side_out = char(lower(side(1)));
 % node = (strcat('trial',num2str(trialCnt),'_', c3dname,'_',num2str(stepCnt),'_', side_out));
 switch condition
-    case {'Gait','Generic'}
+    case {'Gait','Generic','Running'}
         c3dname = strrep(c3dname,[condition,' '],[condition,'_']);
+    case {'Cutting Left'}
+        c3dname = strrep(c3dname,[condition,' '],'cutting_le_');
+    case {'Cutting Right'}
+        c3dname = strrep(c3dname,[condition,' '],'cutting_ri_');
     case 'Counter-Movement Jump'
         c3dname = strrep(c3dname,[condition,' '],'cmj_');
     case 'Counter-Movement Jump Left'

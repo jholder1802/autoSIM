@@ -83,7 +83,7 @@ for n = 1:length(subjectDirs)
     end; clearvars m;
 end; clearvars n;
 
-rootDirs = rootDirs(contains(rootDirs,{'Clementi'}));
+rootDirs = rootDirs(contains(rootDirs,{'Absamann'})); % Buchinger, Clementi
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -127,7 +127,7 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {fullfile(rootDirectory,'Counter-movementjumpsession\')}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            workingDirectories = {fullfile(rootDirectory,['Cuttingsession_2','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
             staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
             staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
         case 2
@@ -161,8 +161,8 @@ for j = 1 : length(rootDirs)
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
-    % % ,'Gait','Running','Counter-Movement Jump Left',...
+    conditions =  {'Cutting Left','Cutting Right'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    % % ,'Gait','Running','Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
     %    'Drop Jump Bilateral','Single-Leg Jump Left','Squatting','Squatting Left'
 
     %% ===== Simulation Settings ==============================================
@@ -257,7 +257,7 @@ for j = 1 : length(rootDirs)
     % discontinuities in moment arms at the hip and knee and wrapping objects will be iteratively
     % reduced until discontinuities are resolved. This script is based on Willi
     % Kollers (unpublished) work.
-    checkAndAdaptMomArms = true; % default = true; true or false
+    checkAndAdaptMomArms = false; % default = true; true or false
 
     %%----- Contact Energy ----------------------------------------------------
     % Specify COMAK settings, Contact Energy and Muscle Weight
