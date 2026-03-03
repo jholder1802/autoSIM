@@ -286,7 +286,7 @@ for j = 1 : length(rootDirs)
     % Add file-prefix to distinguish different setups, for example to indicate a specfic trial 'variation', e.g. 'with_muscle_optimization'
     % Note: for convenience during group analysis it is recommended to always use a prefix!
     % Note always separate prefix conditions with '-' (standard-CE150). Do not use an '_'! Otherwise it will not work.
-    prefix = 'lig5-sgf1000'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
+    prefix = 'lig5-sgf1000-v2'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
 
     %%----- Data Augmentation -------------------------------------------------
     % Data Augmentation-Mode. If you set this to true, each trial will be run

@@ -464,11 +464,30 @@
     <use_visualizer>false</use_visualizer>
     <!--Level of debug information reported (0: low, 1: medium, 2: high)-->
     <verbose>0</verbose>
-    <!--Analyses to be performedthroughout the COMAK simulation.-->
-    <AnalysisSet>
-        <objects>
-        </objects>
-        <groups />
-    </AnalysisSet>
+	<!--Analyses to be performedthroughout the COMAK simulation.-->
+	<!--Set of analyses to be run during the investigation.-->
+	<AnalysisSet name="Analyses">
+		<objects>
+			<MuscleAnalysis name="MuscleAnalysis">
+				<!--Flag (true or false) specifying whether on. True by default.-->
+				<on>true</on>
+				<!--Start time.-->
+				<start_time>0.20849999999999999</start_time>
+				<!--End time.-->
+				<end_time>0.45700000000000002</end_time>
+				<!--Specifies how often to store results during a simulation. More specifically, the interval (a positive integer) specifies how many successful integration steps should be taken before results are recorded again.-->
+				<step_interval>1</step_interval>
+				<!--Flag (true or false) indicating whether the results are in degrees or not.-->
+				<in_degrees>true</in_degrees>
+				<!--List of muscles for which to perform the analysis. Use 'all' to perform the analysis for all muscles.-->
+				<muscle_list> all</muscle_list>
+				<!--List of generalized coordinates for which to compute moment arms. Use 'all' to compute for all coordinates.-->
+				<moment_arm_coordinate_list> all</moment_arm_coordinate_list>
+				<!--Flag indicating whether moment-arms and/or moments should be computed.-->
+				<compute_moments>false</compute_moments>
+			</MuscleAnalysis>
+		</objects>
+		<groups />
+	</AnalysisSet>
     </COMAKTool>
 </OpenSimDocument>
