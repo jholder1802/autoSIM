@@ -59,6 +59,8 @@ if strcmp(condition,'Counter-Movement Jump')
 elseif strcmp(condition,'Squatting')
     commonFileNames = commonFileNames(and(contains(commonFileNames, condition,'IgnoreCase',true),...
         and(~contains(commonFileNames, 'Left','IgnoreCase',true),~contains(commonFileNames, 'Right','IgnoreCase',true))));
+elseif strcmp(condition,'LatSidestep')
+    commonFileNames = commonFileNames(contains(commonFileNames, 'Generic','IgnoreCase',true));
 % % end added: jh
 else    
     commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));

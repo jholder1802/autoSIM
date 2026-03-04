@@ -3,10 +3,6 @@
 *.pdf
 *.png
 
-# # Persönliche Daten
-_data/
-_local_config/
-
 # Temporäre MATLAB Dateien
 *.asv
 *.mex*
@@ -15,5 +11,10 @@ _local_config/
 *.slx
 *.mdl
 
+# # Persönliche Daten
+_data/
+_local_config/
+
 # einzelne dateien
 git-commands.md
+bashData-version.md

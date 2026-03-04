@@ -11,7 +11,7 @@ threshold=50; % % jh (14.04.2025): threshold 20 N
 % Decide if walking trial or SEBT trial
 switch condition
     % % % Walking
-    case {'Gait','Running','Cutting Left','Cutting Right'}
+    case {'Gait','Running','Cutting Left','Cutting Right','LatSidestep'}
         fp_contact = time((dat>threshold));
         IC = fp_contact(1);
         TO = fp_contact(end);
@@ -130,7 +130,7 @@ switch condition
         ICi = IC*mot_rate-1; 
         cTO = TO; 
         cIC = IC;
-    case 'Generic' % % % jh (14.05.2025): added for Y-Balance-Test (Gerlinde Greiner)
+    case {'Generic'} % % % jh (14.05.2025): added for Y-Balance-Test (Gerlinde Greiner)
         % if 
         waistback_z = mkrs.WaistBack(:,3);  
         threshold=mean(waistback_z(25:150))*0.99;
@@ -176,6 +176,12 @@ switch condition
         c3dname = strrep(c3dname,[condition,' '],'squat_le_');
     case 'Squatting Right'
         c3dname = strrep(c3dname,[condition,' '],'squat_ri_');
+    case 'LatSidestep'
+        if strcmpi(side,'right')
+            c3dname = strrep(c3dname,['Generic',' '],['latS_','ri_']);
+        elseif strcmpi(side,'left')
+            c3dname = strrep(c3dname,['Generic',' '],['latS_','le_']);
+        end
 end
 node = (strcat(c3dname,'_',side_out)); % % jh (05.02.25): changed
 

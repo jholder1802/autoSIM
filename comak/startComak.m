@@ -127,8 +127,7 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {  fullfile(rootDirectory,['Runningsession','\']),...
-                                    fullfile(rootDirectory,['Gaitsession','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            workingDirectories = {  fullfile(rootDirectory,['Generic','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
             staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
             staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name),...
                               fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
@@ -163,7 +162,7 @@ for j = 1 : length(rootDirs)
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'Running','Gait'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    conditions =  {'LatSidestep'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
     % % 'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right','Cutting Left','Cutting Right','Squatting','Squatting Left','Squatting Right','Single-Leg Landing Left','Single-Leg Landing Right',...
 
     %% ===== Simulation Settings ==============================================
