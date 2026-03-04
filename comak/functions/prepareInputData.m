@@ -232,15 +232,6 @@ for k = 1 : length(paths.c3d)
         FPs = strrep(FPs, 'FPR','Right');
         FPs = strrep(FPs, 'FPI','Invalid');
 
-        % if contains(condition,'Left')
-        %     idxFP = find(contains(FPs,'Left'));
-        %     FPs = FPs(idxFP);
-        % elseif contains(condition,'Right')
-        %     idxFP = find(contains(FPs,'Right'));
-        %     FPs = FPs(idxFP);
-        % end
-
-
         %% Get Event info & more
         % Get marker data for mSEBT event detection
         mkrs = btkGetMarkers(c3d);

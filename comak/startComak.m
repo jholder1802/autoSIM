@@ -127,9 +127,11 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {fullfile(rootDirectory,['Cuttingsession_2','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            workingDirectories = {  fullfile(rootDirectory,['Runningsession','\']),...
+                                    fullfile(rootDirectory,['Gaitsession','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
             staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
-            staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
+            staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name),...
+                              fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
         case 2
             %----- Option #2 ----------------------------------------------------------
             % Create workingDirectories and staticC3dFiles automatically and store a local file in the rootDirectory for later usage.
@@ -161,9 +163,8 @@ for j = 1 : length(rootDirs)
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'Cutting Left','Cutting Right'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
-    % % ,'Gait','Running','Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
-    %    'Drop Jump Bilateral','Single-Leg Jump Left','Squatting','Squatting Left'
+    conditions =  {'Running','Gait'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    % % 'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right','Cutting Left','Cutting Right','Squatting','Squatting Left','Squatting Right','Single-Leg Landing Left','Single-Leg Landing Right',...
 
     %% ===== Simulation Settings ==============================================
 
@@ -286,7 +287,7 @@ for j = 1 : length(rootDirs)
     % Add file-prefix to distinguish different setups, for example to indicate a specfic trial 'variation', e.g. 'with_muscle_optimization'
     % Note: for convenience during group analysis it is recommended to always use a prefix!
     % Note always separate prefix conditions with '-' (standard-CE150). Do not use an '_'! Otherwise it will not work.
-    prefix = 'lig5-sgf1000-v2'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
+    prefix = 'lig5-sgf1000'; % default = 'standard', or e.g. 'noTimeNorm', 'VarAligned2deg'
 
     %%----- Data Augmentation -------------------------------------------------
     % Data Augmentation-Mode. If you set this to true, each trial will be run

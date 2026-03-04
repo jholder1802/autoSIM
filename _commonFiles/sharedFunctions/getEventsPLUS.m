@@ -69,7 +69,8 @@ switch condition
         cIC = IC; % % jh (23.01.25): added for CMJ
     %}
     case {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
-        'Single-Leg Jump Left','Single-Leg Jump Right'} % % only landing
+        'Single-Leg Jump Left','Single-Leg Jump Right',...
+        'Single-Leg Landing Left','Single-Leg Landing Right'} % % only landing
         index0 = find(dat == 0, 1,"first");
         index_threshold = find(dat(index0:end) > threshold, 1,"first");
         index_threshold = index0 + index_threshold;
@@ -165,6 +166,10 @@ switch condition
         c3dname = strrep(c3dname,[condition,' '],'slj_le_');
     case 'Single-Leg Jump Right'
         c3dname = strrep(c3dname,[condition,' '],'slj_ri_');
+    case 'Single-Leg Landing Left'
+        c3dname = strrep(c3dname,[condition,' '],'sll_le_');
+    case 'Single-Leg Landing Right'
+        c3dname = strrep(c3dname,[condition,' '],'sll_ri_');
     case 'Squatting'
         c3dname = strrep(c3dname,[condition,' '],'squat_');
     case 'Squatting Left'
