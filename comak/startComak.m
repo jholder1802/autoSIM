@@ -53,6 +53,9 @@ addpath(genpath(fullfile(repoPath)));
 % Also add common Files
 addpath(genpath(fullfile(strcat(repoPath,'\..\_commonFiles'))));
 
+% Also add _local_config Files (jh, 19.03.2026)
+addpath(genpath(fullfile(strcat(repoPath,'\..\_local_config'))));
+
 % Save repo path for later.
 repoPaths.repo = repoPath;
 repoPaths.commonFiles = fullfile(strcat(repoPath,'\..\_commonFiles'));
@@ -83,7 +86,7 @@ for n = 1:length(subjectDirs)
     end; clearvars m;
 end; clearvars n;
 
-rootDirs = rootDirs(contains(rootDirs,{'Absamann'})); % Buchinger, Clementi
+rootDirs = rootDirs(contains(rootDirs,{'Clementi'})); % Buchinger, Clementi
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -127,7 +130,7 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {  fullfile(rootDirectory,['Generic','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            workingDirectories = {  fullfile(rootDirectory,['lungeslateral','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
             staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
             staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name),...
                               fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}

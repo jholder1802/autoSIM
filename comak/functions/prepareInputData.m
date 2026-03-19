@@ -44,6 +44,14 @@ workingDirectory = fullfile(workingDirectory);
 tmp_c3d = strtrim(string(ls('*.c3d')));
 % tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
 tmp_enf = strtrim(string(ls('*.enf')));
+% % added (jh, 19.03.2026)
+if any(tmp_enf == "") || isempty(tmp_enf)
+    for n = 1:length(tmp_c3d)
+        generateENF_auto(fullfile(rootWorkingDirectory,tmp_c3d{n}))
+    end;clearvars n;
+    tmp_enf = strtrim(string(ls('*.enf')));
+end
+% % 
 
 % Make sure that only *.enf files are listed which have a corresponding *.c3d file
 tmpNamesc3d = erase(tmp_c3d,'.c3d'); % remove file ending
@@ -59,8 +67,8 @@ if strcmp(condition,'Counter-Movement Jump')
 elseif strcmp(condition,'Squatting')
     commonFileNames = commonFileNames(and(contains(commonFileNames, condition,'IgnoreCase',true),...
         and(~contains(commonFileNames, 'Left','IgnoreCase',true),~contains(commonFileNames, 'Right','IgnoreCase',true))));
-elseif strcmp(condition,'LatSidestep')
-    commonFileNames = commonFileNames(contains(commonFileNames, 'Generic','IgnoreCase',true));
+elseif strcmp(condition,'LatSidestep') 
+    commonFileNames = commonFileNames(contains(commonFileNames, 'Lunges lateral','IgnoreCase',true));
 % % end added: jh
 else    
     commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
