@@ -1,3 +1,11 @@
 *.log
 *.asv
 *.pdf
+
+# Ignore folders that are saved in a different git environment.
+_local_config/
+_data/
+
+# Ignore files that only exist for personal use.
+bashData-version.md
+git-commands.md
