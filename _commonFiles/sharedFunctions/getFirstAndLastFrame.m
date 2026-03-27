@@ -23,6 +23,9 @@ end
 [~,c3dname,~] = fileparts(paths.c3d{k});
 node = strcat('trial',num2str(trialCnt),'_', c3dname);
 
+% Replace forbidden chars
+node = replace(node, "-", "_"); % added 28.02.2026
+
 InputData.(node).name = char(strcat(c3dname,'_',num2str(stepCnt))); %char(c3dname);
 InputData.(node).c3dPath = char(paths.c3d(k));
 InputData.(node).enfPath = char(paths.enf(k));

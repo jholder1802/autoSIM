@@ -22,7 +22,7 @@ clear all; close all; clc;
 %
 % Written by:           Brian Horsak - brian.horsak@fhstp.ac.at
 %
-% Last changed:         06/2025
+% Last changed:         03/2026
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% ------------------------------------------------------------------------
@@ -116,6 +116,7 @@ for j = 1 : length(rootDirs)
             %---
             [workingDirectories, staticC3dFiles] = getTopLvlFoldersStatics(rootDirectory, 'byEnfDescription', 'Stand', ''); % default (OSS only!) = 'byEnfDescription', 'Stand', '';  default (general) = 'byC3dFilePatternName', 'Static', '';
 
+
         case 3
             %----- Option #3 ----------------------------------------------------------
             % Read [workingDirectories, staticC3dFiles] from local file which was
@@ -196,10 +197,6 @@ for j = 1 : length(rootDirs)
     % replaced during scaling.
     lockSubtalar4Scaling = true; % default = true; true or false
 
-    %%----- Time Normalization ------------------------------------------------
-    % Normalize to 100% activity time (e.g. gait cycle). As of today I do think this only affects the JAM setup file
-    timeNorm = 'true'; % default = 'true'; 'true' or 'false'
-
     %%----- Adjust Tibiofemoral Angle -----------------------------------------
     % Define if the model's frontal tibio-femoral angle should be adjusted, in degrees, Varus(+) / Valgus(-)
     % You can set manual adjustments with tf_angle_r/l. If tf_angle_fromSource is set to 'fromStatic' the tf angle from the static trial will be used based on the
@@ -250,6 +247,17 @@ for j = 1 : length(rootDirs)
     % true only adds the markers to the static *.trc file.
     addPelvisHelperMarker = true; % default = true; true or false
 
+    %%----- Compute joint centers for static *.trc file? ----------------------
+    % If the original *.c3d file does not contain any joint centers these
+    % can be computed here. This is also helpfull in case one needs to
+    % standardize the joint centers across large datasets. 
+    compute_joint_centers_for_static_trc = false;    % default = false, true or false
+    hjc_method = "Hara";                             % Options: "Hara", "Harrington_single"
+    
+    % NOTE: joint centers are only appended to the trc file - in case the c3d
+    % files have already joint centers, this might lead to an error.
+    % Replacing existing joint centers is not implemented yet. 
+
     %%----- Create MOT- and TRC-Files -----------------------------------------
     % Do you want to create *.trc and *.mot files automatically using the built-in code? If so, set to true. Note that
     % this will always overwrite any existing *.trc and *.mot files! If set to
@@ -298,7 +306,7 @@ for j = 1 : length(rootDirs)
 
     %%----- Set Lab  ----------------------------------------------------------
     % Define from which lab the data come from
-    labFlag = 'OSSnoArms'; % 'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', FHSTPnoArms, 'ISW', 'LKHG_Cleve', 'FF', 'FHSTP-pyCGM', 'FHCWnoArms', 'OSS-pyCGM', 'FHSTP_pyCGM2_5', FHSTP_pyCGM2_5noArms
+    labFlag = 'OSSnoArms'; % 'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', FHSTPnoArms, 'ISW', 'LKHG_Cleve', 'FF', 'FHSTP-pyCGM', 'FHCWnoArms', 'OSS-pyCGM', 'FHSTP_pyCGM2_5', FHSTP_pyCGM2_5noArms, UMC_HBMnoArms
 
     %%----- Set max. N of cmd windows -----------------------------------------
     % Define number of allowed simultaneously running cmd windows.
@@ -317,7 +325,7 @@ for j = 1 : length(rootDirs)
     % Disable this for debugging when developing the code. Enable for running
     % big file batches so that errors are caught and Matlab won`t stop on an
     % error.
-    catchErrors = true; % default = true
+    catchErrors = false; % default = true
 
     %%----- Settings for use of Parrallell Computing --------------------------
     maxNumWorkers = 7; % this depends on your machine and task ... 7 seemed fine for my 64-core sever (for a standard scale + TF only and with momentarm checks).
@@ -333,6 +341,37 @@ for j = 1 : length(rootDirs)
 
     % Implemented marker sets and some settings based on the markersets
     switch labFlag
+        case 'UMC_HBMnoArms'
+            % HBM marker set full body
+            markerSet = {'JN', 'XIPH', 'C7', 'T10', ...
+                'RASIS','LASIS','LPSIS', 'RPSIS', ...
+                'RGTRO','RLTHI','RATHI','LGTRO','LLTHI','LATHI', ...
+                'RLEK','RMEK','LLEK','LMEK', ...
+                'RTT', 'RFH', 'RLSHA', 'LTT', 'LFH', 'LLSHA', ...
+                'RLM', 'RMM', 'LLM', 'LMM', ...
+                'RHEE', 'RMT1', 'RMT2', 'RMT5', ...
+                'LHEE', 'LMT1', 'LMT2', 'LMT5'
+                };
+
+            % The markers used for the appendHelperMarkers function for the nonuniform pelvis scaling.
+            % Note: they always have to have the following order: {'LASI', 'RASI', 'LHJC', 'RHJC', 'SACR'} or {'LASI', 'RASI', 'LHJC', 'RHJC', 'LPSI', 'RPSI'}!
+            pelvisMarker4nonUniformScaling = {'LASI', 'RASI', 'LHJC', 'RHJC', 'LPSIS', 'RPSIS'};
+
+            % Markers used to calculate the tibial torsion
+            tib_torsion_LeftMarkers = {'LLEK', 'LMEK', 'LLM', 'LMM', 'LMT2'};
+            tib_torsion_RightMarkers = {'RLEK', 'RMEK', 'RLM', 'RMM', 'RMT2'};
+
+            % Markers to compute the joint centers. Note that order is important!
+            if compute_joint_centers_for_static_trc == false
+                compute_joint_centers_for_static_trc = true; % we foce the jc estimation since the markerset does not inlcude it anyway.
+                warning("<compute_joint_centers_for_static_trc> was set to true since markerset does not have joint centers!")
+            end
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASIS", "LASIS", "RPSIS", "LPSIS"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LLEK", "LMEK", "RLEK", "RMEK"]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LLM", "LMM", "RLM", "RMM" ]; % order: left_lat - left_med - right_lat - right_med
+
         case {'OSSnoArms', 'FHSTPnoArms', 'FHCWnoArms'}
             % Cleve marker set withou arms
             markerSet = {   'RFHD','LFHD','LBHD','RBHD',...
@@ -352,6 +391,20 @@ for j = 1 : length(rootDirs)
             % Markers used to calculate the tibial torsion
             tib_torsion_LeftMarkers = {'LKNE', 'LKJC', 'LANK', 'LAJC', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RKJC', 'RANK', 'RAJC', 'RTOE'};
+
+            % Marker to compute the joint centers. Note that order is important!
+            if compute_joint_centers_for_static_trc
+                % Note: impossible here as long as we do not have medial knee
+                % markers defined.
+                compute_joint_centers_for_static_trc = false;
+                warning("<compute_joint_centers_for_static_trc> was set to false since markerset does not have medial knee and ankle markers!")
+            end
+
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "", "RKNE", ""]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "", "RANK", "" ]; % order: left_lat - left_med - right_lat - right_med
 
         case {'OSS', 'FHSTP-BIZ', 'FHSTP'}
             % Cleve marker set full body
@@ -375,6 +428,20 @@ for j = 1 : length(rootDirs)
             tib_torsion_LeftMarkers = {'LKNE', 'LKJC', 'LANK', 'LAJC', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RKJC', 'RANK', 'RAJC', 'RTOE'};
 
+            % Marker to compute the joint centers. Note that order is important!
+            if compute_joint_centers_for_static_trc
+                % Note: impossible here as long as we do not have medial knee
+                % markers defined.
+                compute_joint_centers_for_static_trc = false;
+                warning("<compute_joint_centers_for_static_trc> was set to false since markerset does not have medial knee and ankle markers!")
+            end
+
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "", "RKNE", ""]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "", "RANK", "" ]; % order: left_lat - left_med - right_lat - right_med
+
         case {'FHSTP-pyCGM', 'OSS-pyCGM', 'FHCW'}
             % Cleve marker set full body
             markerSet = {   'RFHD','LFHD','LBHD','RBHD',...
@@ -397,6 +464,13 @@ for j = 1 : length(rootDirs)
             % Markers used to calculate the tibial torsion
             tib_torsion_LeftMarkers = {'LKNE', 'LKNM', 'LANK', 'LANM', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RKNM', 'RANK', 'RANM', 'RTOE'};
+
+            % Marker to compute the joint centers. Note that order is important!
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "LKNM", "RKNE", "RKNM"]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "LKNM", "RANK", "RKNM" ]; % order: left_lat - left_med - right_lat - right_med
         
         case {'FHSTP_pyCGM2_5'}
             % pyCGM2.5 markerset without head
@@ -420,6 +494,13 @@ for j = 1 : length(rootDirs)
             % Markers used to calculate the tibial torsion
             tib_torsion_LeftMarkers = {'LKNE', 'LKNM', 'LANK', 'LMED', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RKNM', 'RANK', 'RMED', 'RTOE'};
+
+            % Marker to compute the joint centers. Note that order is important!
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "RPSI", "LPSI"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "LKNM", "RKNE", "RKNM"]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "LKNM", "RANK", "RKNM" ]; % order: left_lat - left_med - right_lat - right_med
         
         case {'FHSTP_pyCGM2_5noArms'}
             % pyCGM2.5 markerset without head
@@ -458,6 +539,13 @@ for j = 1 : length(rootDirs)
             tib_torsion_LeftMarkers = {'LKNE', 'LMKNE', 'LANK', 'LMMA', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RMKNE', 'RANK', 'RMMA', 'RTOE'};
 
+            % Marker to compute the joint centers. Note that order is important!
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "RPSI", "LPSI"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "LMKNE", "RKNE", "RMKNE"]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "LMMA", "RANK", "RMMA" ]; % order: left_lat - left_med - right_lat - right_med
+
         case {'LKHG_Cleve'}
             % Cleve comak marker set full body
             markerSet = {...
@@ -476,6 +564,13 @@ for j = 1 : length(rootDirs)
             % Markers used to calculate the tibial torsion
             tib_torsion_LeftMarkers = {'LKNE', 'LMKNE', 'LANK', 'LMMA', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RMKNE', 'RANK', 'RMMA', 'RTOE'};
+
+            % Marker to compute the joint centers. Note that order is important!
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "LKNM", "RKNE", "RKNM"]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "LKNM", "RANK", "RKNM" ]; % order: left_lat - left_med - right_lat - right_med
 
         case 'LKHG_PiG'
             markerSet = {   'RASI','LASI','SACR', ...
@@ -508,6 +603,20 @@ for j = 1 : length(rootDirs)
             % the tibial torsion correction.
             tib_torsion_LeftMarkers = nan;
             tib_torsion_RightMarkers = nan;
+
+            % Marker to compute the joint centers. Note that order is important!
+            if compute_joint_centers_for_static_trc
+                % Note: impossible here as long as we do not have medial knee
+                % markers defined.
+                compute_joint_centers_for_static_trc = false;
+                warning("<compute_joint_centers_for_static_trc> was set to false since markerset does not have medial knee and ankle markers!")
+            end
+
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "", "RKNE", ""]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "", "RANK", "" ]; % order: left_lat - left_med - right_lat - right_med
     end
 
     %% Prepare to run the workflow and postprocessing
@@ -591,10 +700,11 @@ for j = 1 : length(rootDirs)
         %for i_parfor = startIdx:endIdx; warning("parfor not activated!"); %#> for development only
         parfor (i_parfor = startIdx:endIdx, maxNumWorkers)
             loops4Models_parfor(rootDirectory, workingDirectories, staticC3dFiles, conditions, labFlag, path2GenericModels, path2opensim, path2setupFiles, tf_angle_r, tf_angle_l, ...
-                firstContact_L, firstContact_R, prefixCell, timeNorm, maxCmd, thresholdCpuLoad, lockSubtalar4Scaling, ...
+                firstContact_L, firstContact_R, prefixCell, maxCmd, thresholdCpuLoad, lockSubtalar4Scaling, ...
                 scaleMuscleStrength, manualMusScaleF, markerSet, bodyheightGenericModel, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, tf_angle_fromSource, torsiontool, useDirectKinematics4TibRotEstimationAsFallback, ...
                 tib_torsion_LeftMarkers, tib_torsion_RightMarkers, forceTrcMotCreation, ForceModelCreation, renameC3DFiles2enfDescription, ...
-                Model2Use, tasks, checkAndAdaptMomArms, useASTool, i_parfor, useStatic4FrontAlignmentAsFallback, useC3Devents, useCPUThreshold, tibTorsionAdaptionMethod, pelvisWidthGenericModel, scalePelvisManually, varNameKneeAngle_c3d);
+                Model2Use, tasks, checkAndAdaptMomArms, useASTool, i_parfor, useStatic4FrontAlignmentAsFallback, useC3Devents, useCPUThreshold, tibTorsionAdaptionMethod, pelvisWidthGenericModel, scalePelvisManually, ...
+                varNameKneeAngle_c3d, compute_joint_centers_for_static_trc, jc_base_data);
         end
 
         % Shut down parallel pool to release allocated RAM by the parpool.

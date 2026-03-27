@@ -186,8 +186,36 @@ switch labFlag
         R_FP2 = R_FP*RotMat(1:3,1:3);
         R_FP3 = R_FP*RotMat(1:3,1:3);
         R_FP4 = R_FP*RotMat(1:3,1:3);
-    
-    otherwise
+
+    case 'UMC_HBMnoArms' % has no plates
+        % Rotation matrix from c3d to OpenSim for Markers
+        R1 = rotx(0.5*pi); %rotate 90° around X
+        R3 = rotz(pi); %rotate 180° around z
+        R1 = R1(1:3,1:3); %remove translation
+        R3 = R3(1:3,1:3); %remove translation
+        R = R3*R1; % Total rotation
+
+        % Rotation matrix force plate to coordinate system used in c3d file
+        R_FPa = roty(1*pi); % rotate 180° y
+        R_FPa = R_FPa(1:3,1:3);
+        R_FPb =  rotz(0.5*pi); % rotate 180° z
+        R_FPb = R_FPb(1:3,1:3);
+        R_FP = R_FPa*R_FPb;
+
+        % Rotate all force plates
+        RotMat = rotz(1.5*pi); % 270° rot matrix
+        R_FP1 = R_FP*RotMat(1:3,1:3);
+        R_FP2 = R_FP*RotMat(1:3,1:3);
+        R_FP3 = R_FP*RotMat(1:3,1:3);
+        R_FP4 = R_FP*RotMat(1:3,1:3);
+        R_FP5 = R_FP*RotMat(1:3,1:3);
+        R_FP6 = R_FP*RotMat(1:3,1:3);
+        
+        warning off backtrace
+        warning('Forceplates not configured c3d2OpenSim for lab: %s! Please check in case you process inverse dynamics or need events.', labFlag);
+        warning on backtrace
+
+    otherwise        
         warning('Unknown labFlag: %s in c3d2OpenSim. Skript paused!', labFlag);
         pause()
 end
