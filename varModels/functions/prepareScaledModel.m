@@ -115,6 +115,12 @@ switch Model2Use
                 path2ScaleFile = char(fullfile(path2GenericModels,'FHSTP_pyCGM2_5_noArms\'));
                 usedModel  = 'LaiUhlrich2022';
                 scaleTemplate = 'FHSTP_pyCGM2_5_noArms_Scaling_LaiUhlrich.xml';
+            
+            case {'UMC_HBMnoArms'}
+                markerSetPath = 'UMC_HBMnoArms\UMCnoArms_HBM_MarkerSet_LaiUhlrich.xml';
+                path2ScaleFile = char(fullfile(path2GenericModels,'UMC_HBMnoArms\'));
+                usedModel  = 'LaiUhlrich2022noArms';
+                scaleTemplate = 'UMCnoArms_Scaling_LaiUhlrich.xml';
 
             otherwise
                 warning('Unknown labFlag: %s in prepareScaledModel. Skript paused!', labFlag);

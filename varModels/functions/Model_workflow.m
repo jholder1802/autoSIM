@@ -1,4 +1,4 @@
-function Model_workflow(workingDirectory, path2opensim, path2setupFiles,  side, filename, path2trc, path2mot, path2extLoad, path2scaledModel, IC, cTO, cIC, TO, ICi, BW, prefix, tf_angle_r, tf_angle_l, timeNorm, labFlag, Model2Use, tasks)
+function Model_workflow(workingDirectory, path2opensim, path2setupFiles,  side, filename, path2trc, path2mot, path2extLoad, path2scaledModel, IC, cTO, cIC, TO, ICi, BW, prefix, tf_angle_r, tf_angle_l, labFlag, Model2Use, tasks)
 % -------------------------------------------------------------------------
 % This function will run the selected model in Matlab. Several
 % changes to the *.xml settings files can be made within this script.
@@ -22,7 +22,6 @@ function Model_workflow(workingDirectory, path2opensim, path2setupFiles,  side, 
 % used
 % tf_angle_l / tf_angle_l: angle in degrees used to change frontal knee
 % alignment in start script.
-% timeNorm: defines if data should be 100% gait normalized
 % labFlag: string specifiying which lab the data come from
 %
 %
@@ -80,6 +79,9 @@ switch labFlag
     
     case {'FHSTP_pyCGM2_5noArms'}
         path2setupFiles = fullfile(path2setupFiles, [Model2Use, 'Models'],'\FHSTP_pyCGM2_5_noArms\');
+
+    case {'UMC_HBMnoArms'}
+        path2setupFiles = fullfile(path2setupFiles, [Model2Use, 'Models'],'\UMC_HBMnoArms\');
 
     case 'FF'
         path2setupFiles = fullfile(path2setupFiles, [Model2Use, 'Models'],'\FrankFurt\');

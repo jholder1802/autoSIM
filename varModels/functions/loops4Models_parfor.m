@@ -1,9 +1,9 @@
 function loops4Models_parfor(rootDirectory, workingDirectories, staticC3dFiles, conditions, labFlag, path2GenericModels, path2opensim, path2setupFiles, tf_angle_r, tf_angle_l, ...
-    firstContact_L, firstContact_R, prefix, timeNorm, maxCmd, thresholdCpuLoad, lockSubtalar4Scaling, ...
+    firstContact_L, firstContact_R, prefix, maxCmd, thresholdCpuLoad, lockSubtalar4Scaling, ...
     scaleMuscleStrength, manualMusScaleF, markerSet, bodyheightGenericModel, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, tf_angle_fromSource, torsiontool, useDirectKinematics4TibRotEstimationAsFallback, ...
     tib_torsion_LeftMarkers, tib_torsion_RightMarkers, forceTrcMotCreation, ForceModelCreation, renameC3DFiles2enfDescription, ...
     Model2Use, tasks, checkAndAdaptMomArms, useASTool, i_wd, useStatic4FrontAlignmentAsFallback, useC3Devents, useCPUThreshold, tibTorsionAdaptionMethod, pelvisWidthGenericModel, scalePelvisManually, ...
-    varNameKneeAngle_c3d)
+    varNameKneeAngle_c3d, compute_joint_centers_for_static_trc, jc_base_data)
 
 try
 
@@ -59,7 +59,7 @@ try
 
         % Calculate Input data for workflow for all files specified by 'condition' and creates all *.trc and *.mot files
         % Note that the last input defines how the grf data are rotated, e.g. for the 'FHSTP-BIZ' lab or the 'OSS' lab.
-        [InputData] = prepareInputData(rootWorkingDirectory, workingDirectory, staticC3d, condition, labFlag, markerSet, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, forceTrcMotCreation, Model2Use, useC3Devents);
+        [InputData] = prepareInputData(rootWorkingDirectory, workingDirectory, staticC3d, condition, labFlag, markerSet, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, forceTrcMotCreation, Model2Use, useC3Devents, compute_joint_centers_for_static_trc, jc_base_data);
 
         % Get trial names for all condition files
         trials = fieldnames(InputData);
@@ -232,16 +232,20 @@ try
             end
 
             % Create external loads file
-            path2extLoad = createExtLoadsFile(path2enf, path2mot, name, firstContact_L, firstContact_R);
+            if tasks.ID
+                path2extLoad = createExtLoadsFile(path2enf, path2mot, name, firstContact_L, firstContact_R);
+            else
+                path2extLoad = 'NaN';
+            end
 
-            % Run LERNER pipeline for left or right side or full trial.
+            % Run MODEL pipeline for left or right side or full trial.
             if strcmp(side, 'left')
 
                 % Run the pipeline, each trial in one cmd window
                 disp(char(strcat('>>>>> Started trial:',{' '},name, '_', side)));
 
                 % Run simulation if everything is ready
-                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, timeNorm, labFlag, Model2Use,tasks);
+                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, labFlag, Model2Use,tasks);
 
             elseif strcmp(side, 'right')
 
@@ -249,7 +253,7 @@ try
                 disp(char(strcat('>>>>> Started trial:',{' '}, name, '_', side)));
 
                 % Run simulation if everything is ready
-                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, timeNorm, labFlag, Model2Use,tasks);
+                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, labFlag, Model2Use,tasks);
             
             else % Full trial processing
 
@@ -257,7 +261,7 @@ try
                 disp(char(strcat('>>>>> Started trial:',{' '}, name, '_', side)));
 
                 % Run simulation if everything is ready
-                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, timeNorm, labFlag, Model2Use,tasks);
+                Model_workflow(workingDirectory, path2opensim, path2setupFiles, side, name, path2trc, path2mot, path2extLoad, path2Model, IC, cTO, cIC, TO, ICi, BW, cPrefix, tf_angle_r, tf_angle_l, labFlag, Model2Use,tasks);
             end
 
             %% Pause after maximum number of cmd windows are open

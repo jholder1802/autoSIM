@@ -1,4 +1,5 @@
-function [InputData] = prepareInputData(rootWorkingDirectory, workingDirectory, staticC3d, condition, labFlag, markerSet, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, forceTrcMotCreation, Model2Use, useC3Devents)
+function [InputData] = prepareInputData(rootWorkingDirectory, workingDirectory, staticC3d, condition, labFlag, markerSet, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, ...
+    forceTrcMotCreation, Model2Use, useC3Devents, compute_joint_centers_for_static_trc, jc_base_data)
 
 % This file creates the *.mot and *.trc files from all *.c3d files in the
 % working directory. Files are selected based on the string in "condition",
@@ -44,31 +45,57 @@ workingDirectory = fullfile(workingDirectory);
 tmp_c3d = strtrim(string(ls('*.c3d')));
 tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
 
-% Make sure that only *.enf files are listed which have a corresponding *.c3d file
-tmpNamesc3d = erase(tmp_c3d,'.c3d'); % remove file ending
-tmpNamesenf = eraseBetween(tmp_enf,'.','.enf','Boundaries','inclusive'); % remove file ending
-commonFileNames = intersect(tmpNamesc3d, tmpNamesenf);
+if tmp_enf == ""
+    % Get lists of files, and ignore *.enf
+    commonFileNames = erase(tmp_c3d,'.c3d'); % remove file ending
 
-% Exclude static, etc. ...
-commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
+    % Exclude static, etc. ...
+    commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
 
-% Rais error in case no dynamic files were found.
-if isempty(commonFileNames)
-    error(['Warning: No *.c3d files found in wd <', workingDirectory,'>. Check folder and/or conditions label in start.m!']);
+    % Make user aware that no *.enf files are there.
+    warning off backtrace
+    warning(['No *.enf files found in wd <', workingDirectory,'>.', newline, 'I will proceed anyway, but anything beyond inverse kinematics will fail!']);
+    warning on backtrace
+
+    % Make file list
+    files.c3d = strcat(commonFileNames,'.c3d');
+    files.enf = strcat(commonFileNames,'-dummy-no-enf-used-here.c3d');
+
+    % Create enf Flag
+    enf_used = false;
+else
+    % Get lists of files, with *.enf assistance.
+    tmpNamesc3d = erase(tmp_c3d,'.c3d'); % remove file ending
+    tmpNamesenf = eraseBetween(tmp_enf,'.','.enf','Boundaries','inclusive'); % remove file ending
+    
+    % Make sure that only *.enf files are listed which have a corresponding *.c3d file
+    commonFileNames = intersect(tmpNamesc3d, tmpNamesenf);
+
+    % Exclude static, etc. ...
+    commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
+
+    % Rais error in case no dynamic files were found.
+    if isempty(commonFileNames)
+        error(['Warning: No *.c3d files found in wd <', workingDirectory,'>. Check folder and/or conditions label in start.m!']);
+    end
+
+    % Make file list
+    files.c3d = strcat(commonFileNames,'.c3d');
+    files.enf = tmp_enf(contains(tmp_enf, commonFileNames));
+
+    % Create no enf Flag
+    enf_used = true;
 end
 
-% Make file list
-files.c3d = strcat(commonFileNames,'.c3d');
-files.enf = tmp_enf(contains(tmp_enf, commonFileNames));
-
 % Check if static file exists and raise error if not. Otherwise the
-% btk/ezc3d toolbox will raise an error with a dialog box preventing the
+% btk toolbox will raise an error with a dialog box preventing the
 % workflow to continue.
 if ~isfile(staticC3d)
     error(['WARNING: No *.c3d files found in current workingDirectory.' newline ...
-       'Check folder and/or conditions label in start.m!' newline]);
+        'Check folder and/or conditions label in start.m!' newline]);
 end
 
+% ---- Static
 % Write *.trc and *.mot files in working directory for static.
 if forceTrcMotCreation % check if user wants to force to rewrite *.trc and *.mot files with built-in code
     [paths.trc_static, paths.mot_static] = c3d2OpenSim(staticC3d, labFlag, markerSet, pelvisMarker4nonUniformScaling);
@@ -83,15 +110,27 @@ else % expect to have *.trc and *.mot files with same name as the *.c3d file
     end
 end
 
+% Add hip, knee, ankle joint centers to static trc file (for scaling)
+if compute_joint_centers_for_static_trc
+
+    % Compute joint centers and add to trc
+    add_JC_to_TRC_for_scaling(paths.trc_static, paths.trc_static, jc_base_data);
+    disp(">>>> Joint centers were computed and added to the static trc file.")
+end
+
 % Add helper markers to *.trc static trial to allow non-uniform scaling of the pelvis
 if addPelvisHelperMarker
     appendHelperMarkers(paths.trc_static, pelvisMarker4nonUniformScaling);
 end
 
+% ---- Dynamics
 % Write *.trc and *.mot files in working directory for condition
 idx_c3dFiles = 0;
 for i = 1:length(files.c3d)
-    idx_c3dFiles = idx_c3dFiles + 1; % increase index
+    
+    % Increase index
+    idx_c3dFiles = idx_c3dFiles + 1; 
+    
     % Collect paths
     paths.c3d{idx_c3dFiles,:} = char(fullfile(rootWorkingDirectory, files.c3d(idx_c3dFiles)));
     paths.enf{idx_c3dFiles,:} = char(fullfile(rootWorkingDirectory, files.enf(idx_c3dFiles)));
@@ -156,10 +195,18 @@ paths.mot = paths.mot(~cellfun('isempty',paths.mot));
 
 v = read_trcFile(char(fullfile(rootWorkingDirectory, paths.trc_static)));
 
-if ~(all(ismember(markerSet, v.MarkerList)))
-    error(['Warning: The specified static trial <', staticC3d,'> does not contain all necessary markers in wd <', workingDirectory,'>!'])
-end
+expected  = lower(string(markerSet));
+available = lower(string(v.MarkerList));
 
+tf = ismember(expected, available);
+if ~all(tf)
+    % Report using original casing from markerSet, but filter by missing (case-insensitive)
+    missingMask = ~tf;
+    missing = string(markerSet(missingMask));  % preserve original case in message
+
+    error('The specified static trial <%s> is missing markers: %s\nWorking directory: <%s>', ...
+        staticC3d, strjoin(missing, ', '), workingDirectory);
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Create Events %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,57 +227,61 @@ for k = 1 : length(paths.c3d)
         %% Get info about how many valid force plate strikes are in file
         [mot_data, mot_labels, ~] = read_opensim_mot(paths.mot{k});
 
-        %% Read the enf file to a cell array
-        fid = fopen(paths.enf{k},'rt');
-        enf_cell = textscan(fid,'%s','Delimiter','\n');
-        fclose(fid);
-        enf_cell = enf_cell{1,1};
+        if enf_used
+            %% Read the enf file to a cell array
+            fid = fopen(paths.enf{k},'rt');
+            enf_cell = textscan(fid,'%s','Delimiter','\n');
+            fclose(fid);
+            enf_cell = enf_cell{1,1};
 
-        %% Find information about force plates in file
-        % NOTE: if you change this you need to change it also in createExtLoadsFile!
-        enf_idx = find(not(cellfun('isempty',strfind(enf_cell,'FP'))));
+            %% Find information about force plates in file
+            % NOTE: if you change this you need to change it also in createExtLoadsFile!
+            enf_idx = find(not(cellfun('isempty',strfind(enf_cell,'FP'))));
 
-        % Several force plates are here assumed, add lines for addtional forces
-        % plates. You will have to add them in the next block "Harmonize ..." as well
+            % Several force plates are here assumed, add lines for addtional forces
+            % plates. You will have to add them in the next block "Harmonize ..." as well
 
-        for j = 1: length(enf_idx)
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP1'); FP1 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP2'); FP2 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP3'); FP3 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP4'); FP4 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP5'); FP5 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP6'); FP6 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP7'); FP7 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP8'); FP8 = enf_cell{enf_idx(j)}(5:end); end
-            if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP9'); FP9 = enf_cell{enf_idx(j)}(5:end); end
+            for j = 1: length(enf_idx)
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP1'); FP1 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP2'); FP2 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP3'); FP3 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP4'); FP4 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP5'); FP5 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP6'); FP6 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP7'); FP7 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP8'); FP8 = enf_cell{enf_idx(j)}(5:end); end
+                if strcmp(enf_cell{enf_idx(j)}(1:3), 'FP9'); FP9 = enf_cell{enf_idx(j)}(5:end); end
+            end
+
+            %% Harmonize different enf file outputs and create FB cell for loop
+            if exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var') && exist('FP8','var') && exist('FP9','var')
+                FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7, FP8, FP9};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var') && exist('FP8','var')
+                FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7, FP8};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var')
+                FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var')
+                FPs = {FP1, FP2, FP3, FP4, FP5, FP6};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var')
+                FPs = {FP1, FP2, FP3, FP4, FP5};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var')
+                FPs = {FP1, FP2, FP3, FP4};
+            elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var')
+                FPs = {FP1, FP2, FP3};
+            elseif exist('FP1','var') && exist('FP2','var')
+                FPs = {FP1, FP2};
+            elseif exist('FP1','var')
+                FPs = {FP1};
+            end
+
+            % Replace other version of enf file info with the standard used here
+            FPs = strrep(FPs, 'FPL','Left');
+            FPs = strrep(FPs, 'FPR','Right');
+            FPs = strrep(FPs, 'FPI','Invalid');
+        else
+            % Create dummy FP to access trial loop.
+            FPs = {'NaN'};
         end
-
-        %% Harmonize different enf file outputs and create FB cell for loop
-        if exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var') && exist('FP8','var') && exist('FP9','var')
-            FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7, FP8, FP9};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var') && exist('FP8','var')
-            FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7, FP8};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') && exist('FP7','var')
-            FPs = {FP1, FP2, FP3, FP4, FP5, FP6, FP7};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var') && exist('FP6','var') 
-            FPs = {FP1, FP2, FP3, FP4, FP5, FP6};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var') && exist('FP5','var')
-            FPs = {FP1, FP2, FP3, FP4, FP5};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var') && exist('FP4','var')
-            FPs = {FP1, FP2, FP3, FP4};
-        elseif exist('FP1','var') && exist('FP2','var') && exist('FP3','var')
-            FPs = {FP1, FP2, FP3};
-        elseif exist('FP1','var') && exist('FP2','var')
-            FPs = {FP1, FP2};
-        elseif exist('FP1','var')
-            FPs = {FP1};
-        end
-
-        % Replace other version of enf file info with the standard used here
-        FPs = strrep(FPs, 'FPL','Left');
-        FPs = strrep(FPs, 'FPR','Right');
-        FPs = strrep(FPs, 'FPI','Invalid');
-
 
         %% Get Event info & more
         % Get metdata from c3d
@@ -268,7 +319,7 @@ for k = 1 : length(paths.c3d)
         end
 
         % Now start trial loop
-        for i = 1:nLoops 
+        for i = 1:nLoops
             if (strcmp(FPs(i),'Invalid') || strcmp(FPs(i),'Auto')) && ~fullTrialGo
                 % Do nothing
 
@@ -276,7 +327,7 @@ for k = 1 : length(paths.c3d)
 
                 % Get eventes based on lab data
                 switch labFlag
-                    case {'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', 'FHSTPnoArms', 'FHSTP-pyCGM', 'FHCWnoArms', 'FHCW', 'OSS-pyCGM', 'FHSTP_pyCGM2_5', 'FHSTP_pyCGM2_5noArms'}
+                    case {'OSS', 'OSSnoArms', 'FHSTP-BIZ', 'FHSTP', 'FHSTPnoArms', 'FHSTP-pyCGM', 'FHCWnoArms', 'FHCW', 'OSS-pyCGM', 'FHSTP_pyCGM2_5', 'FHSTP_pyCGM2_5noArms', 'UMC_HBMnoArms'}
 
                         if useC3Devents
                             [InputData, node] = getEventsOSS(mot_data, mot_labels, condition, FPs, k, i, trialCnt, stepCnt, paths, events, delta, InputData);
@@ -297,7 +348,7 @@ for k = 1 : length(paths.c3d)
                         else
                             [InputData, node] = getFirstAndLastFrame(mot_data, mot_labels, condition, FPs, k, i, trialCnt, stepCnt, paths, events, delta, InputData);
                         end
-                    
+
                     otherwise
                         warning('Unknown labFlag: %s in prepareInputData. Skript paused!', labFlag);
                         pause()
@@ -308,7 +359,7 @@ for k = 1 : length(paths.c3d)
                 InputData.(node).subjectName = strcat(sub_name, '_', idAddOn);
                 try
                     InputData.(node).Bodymass = metaData.children.PROCESSING.children.Bodymass.info.values();
-    				InputData.(node).BodyHeight = metaData.children.PROCESSING.children.Height.info.values();
+                    InputData.(node).BodyHeight = metaData.children.PROCESSING.children.Height.info.values();
                 catch
                     [c3dPath, ~] = fileparts(paths.c3d{k});
                     mppath = strcat(c3dPath,'\',sub_name{1,1}, '.mp');

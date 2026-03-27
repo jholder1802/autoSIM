@@ -24,10 +24,32 @@ function appendHelperMarkers(trcFile, pelvisMarker)
     
     % extract existing data
     labels      = split(labelRow)';
+    labels      = labels(~cellfun('isempty', labels)); % remove emtpy cells in case there are some.
     nLabels     = length(labels);
     data        = trcContent.data;
     metaData    = split(metaDataRow);
+
+    try
     colheaders  = trcContent.colheaders;
+    catch
+        N = size(data,2) - 2; % remove time and frames from count
+
+        % Preallocate cell array (row vector)
+        colheaders = cell(1, 2 + 3*N);
+
+        % First two empty cells
+        colheaders{1} = '';
+        colheaders{2} = '';
+
+        % Fill triplets: 'Xk','Yk','Zk' for k = 1..N
+        idx = 3;                       % start filling at position 3
+        for k = 1:N
+            colheaders{idx}   = sprintf('X%d', k);
+            colheaders{idx+1} = sprintf('Y%d', k);
+            colheaders{idx+2} = sprintf('Z%d', k);
+            idx = idx + 3;
+        end
+    end
     
     % group coordinate data
     trajectories(:, 1:2, 1)         = trcContent.data(:, 1:2);
