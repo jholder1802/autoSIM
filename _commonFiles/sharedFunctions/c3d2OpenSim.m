@@ -187,7 +187,6 @@ switch labFlag
         R_FP3 = R_FP*RotMat(1:3,1:3);
         R_FP4 = R_FP*RotMat(1:3,1:3);
 
-<<<<<<< HEAD
     case 'PLUS_COD_noArms'
           % Rotation matrix from c3d to OpenSim for Markers
           R1 = rotx(0.5*pi);  % rotate 90Â° around x
@@ -294,8 +293,6 @@ switch labFlag
         R_FP3  = R_FP3b * R_FP3a;
         R_FP3  = R_FP3(1:3,1:3);
 
-    otherwise
-=======
     case 'UMC_HBMnoArms' % has no plates
         % Rotation matrix from c3d to OpenSim for Markers
         R1 = rotx(0.5*pi); %rotate 90° around X
@@ -325,7 +322,7 @@ switch labFlag
         warning on backtrace
 
     otherwise        
->>>>>>> main
+
         warning('Unknown labFlag: %s in c3d2OpenSim. Skript paused!', labFlag);
         pause()
 end

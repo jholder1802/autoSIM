@@ -178,9 +178,9 @@ switch condition
         c3dname = strrep(c3dname,[condition,' '],'squat_ri_');
     case 'LatSidestep'
         if strcmpi(side,'right')
-            c3dname = strrep(c3dname,'Lunges lateral ',['latS_','ri_']);
+            c3dname = strrep(c3dname,'lungeslateral ',['latS_','ri_']);
         elseif strcmpi(side,'left')
-            c3dname = strrep(c3dname,'Lunges lateral ',['latS_','le_']);
+            c3dname = strrep(c3dname,'lungeslateral',['latS_','le_']);
         end
 end
 node = (strcat(c3dname,'_',side_out)); % % jh (05.02.25): changed

@@ -14,6 +14,7 @@
 # # Persönliche Daten
 _data/
 _local_config/
+_data_ARISE_ACL/
 
 # einzelne dateien
 git-commands.md

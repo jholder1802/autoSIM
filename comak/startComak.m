@@ -72,7 +72,7 @@ startpath = strjoin(parts(1:end-1), '\');
 % rootDirs = {fullfile(startpath,'_data\01_2026_R2S_ACL\Absamann_SA_02\2025-02-04'),...
 %             fullfile(startpath,'_data\01_2026_R2S_ACL\Buchinger_AB_09\2025-04-10')};
 
-subjectDirs = dir(fullfile(startpath,'_data\01_2026_R2S_ACL'));
+subjectDirs = dir(fullfile(startpath,'_data_ARISE_ACL'));
 subjectDirs = subjectDirs(~contains({subjectDirs.name},'.'));
 
 rootDirs = [];
@@ -86,7 +86,7 @@ for n = 1:length(subjectDirs)
     end; clearvars m;
 end; clearvars n;
 
-rootDirs = rootDirs(contains(rootDirs,{'Clementi'})); % Buchinger, Clementi
+rootDirs = rootDirs(contains(rootDirs,{'Buchinger','Clementi'})); % Buchinger, Clementi
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -120,7 +120,7 @@ for j = 1 : length(rootDirs)
     %% ===== Set the data to process ==========================================
 
     % Select Option 1 out of 3:
-    Option = 1; % default = 1 (in case you onyl want to process a single folder); Otherwise run case 2 once and afterwards always case 3.
+    Option = 2; % default = 1 (in case you onyl want to process a single folder); Otherwise run case 2 once and afterwards always case 3.
 
     switch Option
         case 1
@@ -165,8 +165,12 @@ for j = 1 : length(rootDirs)
     % Define type of files; For mSEBT directions: AT - PM - PL (these need to be the definitions from the *.enf files!)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
-    conditions =  {'LatSidestep'}; % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
-    % % 'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right','Cutting Left','Cutting Right','Squatting','Squatting Left','Squatting Right','Single-Leg Landing Left','Single-Leg Landing Right',...
+    conditions =  {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
+        'Cutting Left','Cutting Right','Drop Jump Bilateral','Gait','LatSidestep',...
+        'Running','Single-Leg Landing Left','Single-Leg Landing Right',...
+        'Squatting','Squatting Left','Squatting Right'};
+    % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
+    % % ,...
 
     %% ===== Simulation Settings ==============================================
 
