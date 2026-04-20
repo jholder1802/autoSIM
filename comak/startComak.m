@@ -86,7 +86,14 @@ for n = 1:length(subjectDirs)
     end; clearvars m;
 end; clearvars n;
 
-rootDirs = rootDirs(contains(rootDirs,{'Buchinger','Clementi'})); % Buchinger, Clementi
+rootDirs = rootDirs(contains(rootDirs,{'Gr0ss', 'Hagler','Haidvogl', 'Meyer', ...
+                                        }));    % 
+                                                % 
+                                                % fertig: 'Absamann','Buchinger',
+                                                % 'Clementi','Eckschlager','Kastinger','Meinel',
+                                                % 'Minichmayer','Pinsker','Laber','Venus'
+                                                % unvollständig: 
+                                       
 
 % OR in case you have several databases:
 % rootDirs = {'E:\OSS1\', ...
@@ -130,10 +137,9 @@ for j = 1 : length(rootDirs)
             % OpenSim automatically looks for that folder here. If not found in workingDirectory\Geometry, it will look at the standard OpenSim Paths.
             % Make sure that all paths have a '\' at the end!
             %---
-            workingDirectories = {  fullfile(rootDirectory,['lungeslateral','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
+            workingDirectories = {fullfile(rootDirectory,['lungeslateral','\'])}; % {'D:\...\', 'C:\...\', ...} or {'D:\....\'}
             staticC3DFiles = dir(fullfile(rootDirectory,'Staticandfunctionalsession',['Static','*.c3d']));
-            staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name),...
-                              fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
+            staticC3dFiles = {fullfile(staticC3DFiles(1).folder,staticC3DFiles(1).name)}; % {'Static01.c3d', 'Static.c3d', ...} or {'Static01.c3d'}
         case 2
             %----- Option #2 ----------------------------------------------------------
             % Create workingDirectories and staticC3dFiles automatically and store a local file in the rootDirectory for later usage.
@@ -166,11 +172,16 @@ for j = 1 : length(rootDirs)
     % This string is used to filter all potential found *.c3d files in a
     % directory and is based on the actual file name of each *.c3d.
     conditions =  {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
-        'Cutting Left','Cutting Right','Drop Jump Bilateral','Gait','LatSidestep',...
-        'Running','Single-Leg Landing Left','Single-Leg Landing Right',...
-        'Squatting','Squatting Left','Squatting Right'};
+                    'Drop Jump Bilateral','Gait','LatSidestep',...
+                    'Running','Single-Leg Landing Left','Single-Leg Landing Right',...
+                    'Squatting','Squatting Left','Squatting Right'};
+
+    % 'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
+    % 'Cutting Left','Cutting Right','Drop Jump Bilateral','Gait',...
+    % 'Running','Single-Leg Landing Left','Single-Leg Landing Right',...
+    % 'Squatting','Squatting Left','Squatting Right','LatSidestep',
     % {'mSEBT_AT','mSEBT_PM','mSEBT_PL'} or {'WalkA'} or {'Dynamic'}; default (OSS only!) == 'WalkA'
-    % % ,...
+    % {'Cutting Left','Cutting Right'} % ,...
 
     %% ===== Simulation Settings ==============================================
 
@@ -316,9 +327,9 @@ for j = 1 : length(rootDirs)
     % clear any RAM blocked by the memory leak of Matlab. Further you can
     % also set <iterationCntRestart> to force a restart if the iteration loop reaches
     % the set threshold. 
-    allowAutoRestart = false; % default = false; true or false
-    iterationCntRestart = 500; % default = 500; to turn this off, set to e.g. 999999 
-    thresholdFreeRAM = 20; % default = 10; in percentaged of available RAM;
+    allowAutoRestart = true; % default = false; true or false
+    iterationCntRestart = 1500; % default = 500; to turn this off, set to e.g. 999999 
+    thresholdFreeRAM = 12; % default = 10; in percentaged of available RAM;
 
     %% ===== PostProcessing Settings ==========================================
 
@@ -369,7 +380,7 @@ for j = 1 : length(rootDirs)
 
     %%----- Set max. N of cmd windows -----------------------------------------
     % Define number of allowed simultaneously running cmd windows.
-    maxCmd = 8; % default = 8 (for a Surface Book2 @i7-8650U @ 1.90Ghz), 31 for 32-core Server
+    maxCmd = 4; % default = 8 (for a Surface Book2 @i7-8650U @ 1.90Ghz), 31 for 32-core Server
 
     %%----- CPU Load Threshold ------------------------------------------------
     % Define a threshold the CPU-load has to fall below (median over 1 minutes), before the next batch of files are forwarded to the cmd window.

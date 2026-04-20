@@ -42,12 +42,18 @@ workingDirectory = fullfile(workingDirectory);
 
 % Get all files
 tmp_c3d = strtrim(string(ls('*.c3d')));
+if strcmp(condition,'LatSidestep')
+    tmp_c3d = tmp_c3d(contains(tmp_c3d,{'Lunges lateral','lunges lateral'}));
+else
+    tmp_c3d = tmp_c3d(contains(tmp_c3d,condition));
+end
 % tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
-tmp_enf = strtrim(string(ls('*.enf')));
 % % added (jh, 19.03.2026)
-if any(tmp_enf == "") || isempty(tmp_enf)
+tmp_enf = strtrim(string(ls('*.enf')));
+forceENFgeneration = true;
+if any(tmp_enf == "") || isempty(tmp_enf) || forceENFgeneration
     for n = 1:length(tmp_c3d)
-        generateENF_auto(fullfile(rootWorkingDirectory,tmp_c3d{n}))
+        generateENF_auto(fullfile(rootWorkingDirectory,tmp_c3d{n}),condition)
     end;clearvars n;
     tmp_enf = strtrim(string(ls('*.enf')));
 end
@@ -68,7 +74,7 @@ elseif strcmp(condition,'Squatting')
     commonFileNames = commonFileNames(and(contains(commonFileNames, condition,'IgnoreCase',true),...
         and(~contains(commonFileNames, 'Left','IgnoreCase',true),~contains(commonFileNames, 'Right','IgnoreCase',true))));
 elseif strcmp(condition,'LatSidestep') 
-    commonFileNames = commonFileNames(contains(commonFileNames, 'Lunges lateral','IgnoreCase',true));
+    commonFileNames = commonFileNames(contains(commonFileNames, 'lunges lateral','IgnoreCase',true));
 % % end added: jh
 else    
     commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));

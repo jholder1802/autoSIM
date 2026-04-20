@@ -11,7 +11,7 @@ threshold=50; % % jh (14.04.2025): threshold 20 N
 % Decide if walking trial or SEBT trial
 switch condition
     % % % Walking
-    case {'Gait','Running','Cutting Left','Cutting Right','LatSidestep'}
+    case {'Gait','Running','Cutting Left','Cutting Right'}
         fp_contact = time((dat>threshold));
         IC = fp_contact(1);
         TO = fp_contact(end);
@@ -68,6 +68,27 @@ switch condition
         cTO = TO; % % jh (23.01.25): added for CMJ
         cIC = IC; % % jh (23.01.25): added for CMJ
     %}
+    case 'LatSidestep'
+        fp_contact = time((dat>threshold));
+        IC = fp_contact(1);
+        TO = fp_contact(end);
+        ICi = IC*mot_rate-1; % % jh (04.02.25): adapted for Gait
+
+        % contralateral TO % IC contralateral      
+        % % jh (04.02.25): adapted for Gait
+        if isempty(FPs{1}) || isempty(FPs{2})
+            cIC = IC;
+            cTO = TO;
+        else
+            if i == 2 % % contralateral leg is on FP(i == 1)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(1),'_vy')));
+            elseif i == 1 % % contralateral leg is on FP(i == 2)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(2),'_vy')));
+            end
+            fp_contact_contra= time((dat_fp_contra>threshold));
+            cIC = fp_contact_contra(1);
+            cTO = fp_contact_contra(end);
+        end
     case {'Counter-Movement Jump','Counter-Movement Jump Left','Counter-Movement Jump Right',...
         'Single-Leg Jump Left','Single-Leg Jump Right',...
         'Single-Leg Landing Left','Single-Leg Landing Right'} % % only landing
@@ -177,11 +198,12 @@ switch condition
     case 'Squatting Right'
         c3dname = strrep(c3dname,[condition,' '],'squat_ri_');
     case 'LatSidestep'
-        if strcmpi(side,'right')
-            c3dname = strrep(c3dname,'lungeslateral ',['latS_','ri_']);
-        elseif strcmpi(side,'left')
-            c3dname = strrep(c3dname,'lungeslateral',['latS_','le_']);
+        if strcmpi(lower(side),'right')
+            c3dname = strrep(c3dname,'lunges lateral ',['latS_','ri_']);
+        elseif strcmpi(lower(side),'left')
+            c3dname = strrep(c3dname,'lunges lateral',['latS_','le_']);
         end
+        c3dname = replace(c3dname, ' ', '');
 end
 node = (strcat(c3dname,'_',side_out)); % % jh (05.02.25): changed
 
