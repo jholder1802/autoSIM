@@ -30,7 +30,7 @@
 					<!--Whether or not this task will be used during inverse kinematics solve.-->
 					<apply>true</apply>
 					<!--Weight given to a marker or coordinate for solving inverse kinematics problems.-->
-					<weight>20</weight>
+					<weight>25</weight>
 				</IKMarkerTask>
 				<IKMarkerTask name="RHJC">
 					<!--Whether or not this task will be used during inverse kinematics solve.-->

@@ -210,25 +210,25 @@
 					<!--Whether or not this task will be used during inverse kinematics solve.-->
 					<apply>true</apply>
 					<!--Weight given to a marker or coordinate for solving inverse kinematics problems.-->
-					<weight>5</weight>
+					<weight>15</weight>
 				</IKMarkerTask>
 				<IKMarkerTask name="CLAV">
 					<!--Whether or not this task will be used during inverse kinematics solve.-->
 					<apply>true</apply>
 					<!--Weight given to a marker or coordinate for solving inverse kinematics problems.-->
-					<weight>5</weight>
+					<weight>15</weight>
 				</IKMarkerTask>
 				<IKMarkerTask name="LSHO">
 					<!--Whether or not this task will be used during inverse kinematics solve.-->
 					<apply>true</apply>
 					<!--Weight given to a marker or coordinate for solving inverse kinematics problems.-->
-					<weight>5</weight>
+					<weight>1</weight>
 				</IKMarkerTask>
 				<IKMarkerTask name="RSHO">
 					<!--Whether or not this task will be used during inverse kinematics solve.-->
 					<apply>true</apply>
 					<!--Weight given to a marker or coordinate for solving inverse kinematics problems.-->
-					<weight>5</weight>
+					<weight>1</weight>
 				</IKMarkerTask>
 				<IKMarkerTask name="T10">
 					<!--Whether or not this task will be used during inverse kinematics solve.-->

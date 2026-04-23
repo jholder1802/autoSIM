@@ -522,6 +522,21 @@ for j = 1 : length(rootDirs)
             % Markers used to calculate the tibial torsion
             tib_torsion_LeftMarkers = {'LKNE', 'LKNM', 'LANK', 'LMED', 'LTOE'};
             tib_torsion_RightMarkers = {'RKNE', 'RKNM', 'RANK', 'RMED', 'RTOE'};
+			
+			% Marker to compute the joint centers. Note that order is important!
+            if compute_joint_centers_for_static_trc
+                % Note: impossible here as long as we do not have medial knee
+                % markers defined.
+                compute_joint_centers_for_static_trc = false;
+                warning("<compute_joint_centers_for_static_trc> was set to false since markerset does not have medial knee and ankle markers!")
+            end
+
+            jc_base_data = struct();
+            jc_base_data.method = hjc_method;
+            jc_base_data.hip   = ["RASI", "LASI", "SACR"]; % order: RASI, LASI, SAC OR RASI, LASI, RPSI, LPSI <- left/rigth oder is important markernames can be adjusted.
+            jc_base_data.knee  = ["LKNE", "", "RKNE", ""]; % order: left_lat - left_med - right_lat - right_med
+            jc_base_data.ankle = ["LANK", "", "RANK", "" ]; % order: left_lat - left_med - right_lat - right_med
+			
         case 'ISW'
             markerSet = {   'C7','T10', 'CLAV', 'STRN', 'RBAK', ...
                 'RASI','LASI','RPSI', 'LPSI', ...
@@ -697,8 +712,10 @@ for j = 1 : length(rootDirs)
         endIdx = min(batchIdx * batchSize, Nmax);  % Ensure not to exceed Nmax
 
         % Run the parallel loop for the current batch
-        %for i_parfor = startIdx:endIdx; warning("parfor not activated!"); %#> for development only
-        parfor (i_parfor = startIdx:endIdx, maxNumWorkers)
+        parfor_active = true;
+        
+        %for i_parfor = startIdx:endIdx; warning("parfor not activated!"); parfor_active = false; %#> for development only %#> for development only
+        parfor (i_parfor = startIdx:endIdx, maxNumWorkers) 
             loops4Models_parfor(rootDirectory, workingDirectories, staticC3dFiles, conditions, labFlag, path2GenericModels, path2opensim, path2setupFiles, tf_angle_r, tf_angle_l, ...
                 firstContact_L, firstContact_R, prefixCell, maxCmd, thresholdCpuLoad, lockSubtalar4Scaling, ...
                 scaleMuscleStrength, manualMusScaleF, markerSet, bodyheightGenericModel, addPelvisHelperMarker, pelvisMarker4nonUniformScaling, tf_angle_fromSource, torsiontool, useDirectKinematics4TibRotEstimationAsFallback, ...
@@ -715,8 +732,10 @@ for j = 1 : length(rootDirs)
         %monitorCmdWindowsAndForceClose(5, 60);
     end
 
-    % Clean up WD_parfooLoop files to single WD file.
-    cleanUpParforWDFiles(fullfile(rootDirectory, strcat('_', Model2Use, '-WD-tmpLogFiles')), length(workingDirectories),  fullfile(rootDirectory, strcat('workingDirectories-', Model2Use, '_', prefix, '.xlsx')));
+    if parfor_active
+        % Clean up WD_parfooLoop files to single WD file.
+        cleanUpParforWDFiles(fullfile(rootDirectory, strcat('_', Model2Use, '-WD-tmpLogFiles')), length(workingDirectories),  fullfile(rootDirectory, strcat('workingDirectories-', Model2Use, '_', prefix, '.xlsx')));
+    end
 
     %% Final  message
     % End timer
