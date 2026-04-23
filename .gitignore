@@ -1,3 +1,8 @@
 *.log
 *.asv
 *.pdf
+
+# Data folders (local / large / external)
+_data/
+_data_ARISE_ACL/
+_local_config/
