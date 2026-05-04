@@ -281,7 +281,7 @@ for i_wd = i_wd : length(workingDirectories)
                                     flag_modelScaledLeft = true;
                                 end
                         end
-
+                        
                         % Create external loads file
                         path2extLoad = createExtLoadsFile(path2enf, path2mot, name, firstContact_L, firstContact_R);
 
@@ -413,10 +413,10 @@ for i_wd = i_wd : length(workingDirectories)
                                 overFlowThreshold = overFlowThreshold + overFlowThreshold;
                             end
                         end
-
+                        
                         numFiles = numFiles + 1;
                     end
-
+                
                 catch ME
                     if catchErrors
                         disp(char(strcat('>>>>> An error occured during processing of condition', {' "'}, condition, {'" '},'in wd:', {' '},  workingDirectory,{'. '}, 'Skipped condition in current wd!')));
@@ -431,6 +431,7 @@ for i_wd = i_wd : length(workingDirectories)
                 end
 
                 %% Now run postprocessing if user selected this option
+                
                 if performPostProcessing
 
                     % Wait to make sure all batch files are finished
@@ -461,7 +462,7 @@ for i_wd = i_wd : length(workingDirectories)
                 end
 
             end
-
+            
         catch ME
             if catchErrors
                 disp(char(strcat('>>>>> An error occured during processing of wd:', {' '},  workingDirectory,{'. '}, 'Skipped wd!')));
