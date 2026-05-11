@@ -15,6 +15,7 @@
 _data/
 _local_config/
 _data_ARISE_ACL/
+.vscode/
 
 # einzelne dateien
 bashData-version.md
