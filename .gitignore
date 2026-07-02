@@ -6,3 +6,6 @@
 _data/
 _data_ARISE_ACL/
 _local_config/
+
+.claude/
+.vscode/
