@@ -1,11 +1,22 @@
 *.log
 *.asv
 *.pdf
+*.png
 
-# Data folders (local / large / external)
+# Temporäre MATLAB Dateien
+*.asv
+*.mex*
+*.mat
+*.fig
+*.slx
+*.mdl
+
+# # Persönliche Daten
 _data/
-_data_ARISE_ACL/
 _local_config/
-
-.claude/
+_data_ARISE_ACL/
 .vscode/
+.claude/
+
+# einzelne dateien
+bashData-version.md

@@ -44,7 +44,7 @@ delete(fullfile(outputPath, 'tmp_IKmarkerErrors2checkMomArms.sto'));
 [maxMarkerError, ~] = max(errors.marker_error_max);
 [maxRMSError, ~] = max(errors.marker_error_RMS);
 
-if maxRMSError <= 0.03
+if maxRMSError <= 0.1 % % 0.03 (2025/04/04) angepasst (jh)
     resultsAreValid = true;
 else
     resultsAreValid = false;

@@ -11,15 +11,15 @@ disp('>>>>> Starting to postprocess the data ...');
 if useParallelToolBox 
     nWorkers = M;
 else
-    nWorkers = 0;
+    nWorkers = 0; % Huthöfer: habe 1 statt 0 geschrieben % default: 0
 end
 
 % Initialize count for catched errors.
 errN = 0; % Number of errors occured and catched
 
 % Loop Folders
-parfor (wd = 1 : length(workingDirectories), nWorkers)
-
+% parfor (wd = 1 : length(workingDirectories), nWorkers) % % geändert zum debuggen, jh (10.11.2025)
+for wd = 1 : length(workingDirectories)
     % Loop through conditions
     for cond = 1 : length(conditions)
 

@@ -41,6 +41,12 @@ switch labFlag
     
     case 'LKHG_PiG'
         path2SpecificSetupFiles = fullfile(path2SetupFiles,'Models\LKHG_PiG\');
+
+    case 'PLUS_COD_noArms'
+        path2SpecificSetupFiles = fullfile(path2SetupFiles,'Models\PLUS_COD_noArms\');
+        
+    case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
+        path2SpecificSetupFiles = fullfile(path2SetupFiles,'Models\_PLUS_pilotMC_noArms\');
 end
 
 % Set some necessary paths

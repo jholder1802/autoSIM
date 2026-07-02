@@ -87,6 +87,13 @@ switch labFlag
 
     case {'LKHG_PiG'}
         path2setupFiles = fullfile(path2setupFiles,'Models\LKHG_PiG\');
+    
+    case 'PLUS_COD_noArms'
+        path2setupFiles = fullfile(path2setupFiles,'Models\PLUS_COD_noArms\');
+
+    case {'PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}
+        path2setupFiles = fullfile(path2setupFiles,'Models\_PLUS_pilotMC_noArms\');
+
 end
 
 % Set some necessary paths
@@ -118,7 +125,7 @@ cd(path.workingDirectory);
 
 %% Set trial info
 trialInfo.startTime = IC;
-trialInfo.endTime = ICi;
+trialInfo.endTime = TO;  % default: % ICi; % Huthöfer
 trialInfo.fileName = strcat(prefix, filename, '_', lower(side(1)));
 
 %% Create COMAK input and results folder and Copy setupFiles in working directory
@@ -195,7 +202,7 @@ changeXML(xmlFile,'force_set_file',path.forceSetFile,1);
 changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),1);
 changeXML(xmlFile,'stop_time',num2str(trialInfo.endTime),1);
 changeXML(xmlFile,'time_step','0.01',1); % Default 0.01
-changeXML(xmlFile,'lowpass_filter_frequency','6',1);
+changeXML(xmlFile,'lowpass_filter_frequency','10',1); % default 6, Markus has tested 10 Hz for kinematics and kinetics and it looks good so far
 
 % Contact energy settings 
 changeXML(xmlFile,'contact_energy_weight',num2str(contactEnergy),1);
@@ -231,13 +238,13 @@ path.jointMechanicsAnalysis = xmlFile;
 
 % Change xml nodes
 changeXML(xmlFile,'model_file',path.scaledModel,1);
-changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName, '_states.sto'),1);
+changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName,'_states.sto'),1);
 changeXML(xmlFile,'results_directory', path.COMAKresultsJAM,1);
 changeXML(xmlFile,'results_file_basename', statesFileName,1);
 changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),1); % trialInfo.startTime
 changeXML(xmlFile,'stop_time',num2str(trialInfo.endTime),1);
 changeXML(xmlFile,'normalize_to_cycle', timeNorm,1); % Will normalize to 100% gait cycle
-changeXML(xmlFile,'lowpass_filter_frequency','6',1); % Default = -1 (false)
+changeXML(xmlFile,'lowpass_filter_frequency','10',1); % Default = -1 (false) % default 6, Markus has tested 10 Hz for kinematics and kinetics and it looks good so far
 changeXML(xmlFile,'print_processed_kinematics','true',1); % Default = false
 changeXML(xmlFile,'write_vtp_files',char(string(writeVtp)),1); % Default = true
 changeXML(xmlFile,'write_h5_file','true',1);
@@ -247,8 +254,8 @@ changeXML(xmlFile,'contact_outputs','all',1);
 changeXML(xmlFile,'contact_mesh_properties','all',1);
 changeXML(xmlFile,'ligaments', jamSettings.ligaments,1);
 changeXML(xmlFile,'ligament_outputs','all',1);
-changeXML(xmlFile,'muscles','none',1);
-changeXML(xmlFile,'muscle_outputs','none',1);
+changeXML(xmlFile,'muscles','all',1);
+changeXML(xmlFile,'muscle_outputs','all',1);
 % Add bodyside to the body paths
 attachedGeometryBodies = strrep(jamSettings.attachedGeometryBodies, '#', side(1));
 changeXML(xmlFile,'attached_geometry_bodies', attachedGeometryBodies,1);
@@ -314,6 +321,7 @@ changeXML(xmlFile,'start_time',num2str(trialInfo.startTime),4);
 changeXML(xmlFile,'end_time',num2str(trialInfo.endTime),4);
 changeXML(xmlFile,'forces_file',strcat(path.COMAKresultsTool,statesFileName,'_force.sto'),1);
 changeXML(xmlFile,'external_loads_file',path.extLoadFile,1);
+changeXML(xmlFile,'states_file',strcat(path.COMAKresultsTool,statesFileName,'_states.sto'),1);
 changeXML(xmlFile,'coordinates_file',strcat(path.COMAKresultsIK,trialInfo.fileName,'_IK_motion_file.mot'),1);
 changeXML(xmlFile,'lowpass_cutoff_frequency_for_coordinates','6',1);
 
@@ -346,21 +354,21 @@ line6 = (['move err.log',' ', path.COMAKresults, [trialInfo.fileName,'_comak-IK_
 % Run system command similar to the batch file
 strCOMAK = 'REM Run COMAK - Tool';
 line7 = (['%BIN%\comak',' ', '%BIN%\jam_plugin.dll',' ', path.currentCOMAKsetting]);
-line8 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_comak-Tool_out.txt']]);
-line9 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_comak-Tool_err.txt']]);
+line8 = (['move out.log',' ', path.COMAKresults, [statesFileName,'comak-Tool_out.txt']]);
+line9 = (['move err.log',' ', path.COMAKresults, [statesFileName,'comak-Tool_err.txt']]);
 
 %% Run Joint Mechanics Analysis
 % Run system command similar to the batch file
 strJAM = 'REM Run Joint Mechanics Analysis';
 line10 = (['%BIN%\joint-mechanics',' ', '%BIN%\jam_plugin.dll',' ', path.jointMechanicsAnalysis]);
-line11 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_JAM_out.txt',]]);
-line12 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_JAM_err.txt',]]);
+line11 = (['move out.log',' ', path.COMAKresults, [statesFileName,'JAM_out.txt',]]);
+line12 = (['move err.log',' ', path.COMAKresults, [statesFileName,'JAM_err.txt',]]);
 
 %% Inverse Dynamics OpenSim
 strID = 'REM Inverse Dynamics - Open Sim';
 line13 = (['%OPENSIM%\opensim-cmd -L',' ', '%BIN%\jam_plugin.dll run-tool',' ', path.OpenSimInverseDynamcis]);
-line14 = (['move out.log',' ', path.COMAKresults, [statesFileName,'_OpenSim-Inverse-Dynamics_out.txt']]);
-line15 = (['move err.log',' ', path.COMAKresults, [statesFileName,'_OpenSim-Inverse-Dynamics_err.txt']]);
+line14 = (['move out.log',' ', path.COMAKresults, [statesFileName,'OpenSim-Inverse-Dynamics_out.txt']]);
+line15 = (['move err.log',' ', path.COMAKresults, [statesFileName,'OpenSim-Inverse-Dynamics_err.txt']]);
 
 %% Analyze
 str_AN = 'REM ANALYZE - Open Sim';

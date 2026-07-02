@@ -19,7 +19,7 @@ if strcmp(rename, 'True')
 else
     path2write = path2stl;
 end
-stlWrite(path2write, f, vs,'mode','ascii')
+stlWrite(path2write, f, vs,'mode','binary')
 
 %% Clear variables except output to prevet memory leak.
 clearvars

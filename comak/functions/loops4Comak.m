@@ -220,7 +220,6 @@ for i_wd = i_wd : length(workingDirectories)
                         path2enf = (InputData.(trials{i}).enfPath);
                         name = (InputData.(trials{i}).name);
 
-
                         % Prepare (scale) the models for both body sides
                         % and also scale contact geometry manually, because these are not scaled by opensim (seems to be a bug).
                         switch side
@@ -228,8 +227,8 @@ for i_wd = i_wd : length(workingDirectories)
                                 if ~flag_modelScaledRight
                                     [path2Model_right, tf_angle_right, torsionTool_right, tf_angle_fromSource_right, MomArmsResolved_right] = prepareScaledModel(rootWorkingDirectory, workingDirectory, path2GenericModels, path2bin, path2opensim, bodymass, static, 'right', ...
                                         labFlag, lockSubtalar4Scaling, scaleMuscleStrength, manualMusScaleF, cPrefix, bodyheightGenericModel, BodyHeight, ...
-                                        tf_angle_r, tf_angle_fromSource, strcat(rootWorkingDirectory, staticC3d), torsiontool, tib_torsion_RightMarkers, ForceModelCreation, checkAndAdaptMomArmsR, sampleInputR, useASTool, useDirectKinematics4TibRotEstimationAsFallback, InputData, ...
-                                        scalePelvisManually, pelvisWidthGenericModel, useStatic4FrontAlignmentAsFallback, tibTorsionAdaptionMethod, varNameKneeAngle_c3d);
+                                        tf_angle_r, tf_angle_fromSource, staticC3d, torsiontool, tib_torsion_RightMarkers, ForceModelCreation, checkAndAdaptMomArmsR, sampleInputR, useASTool, useDirectKinematics4TibRotEstimationAsFallback, InputData, ...
+                                        scalePelvisManually, pelvisWidthGenericModel, useStatic4FrontAlignmentAsFallback, tibTorsionAdaptionMethod, varNameKneeAngle_c3d); % % % strcat(rootWorkingDirectory, staticC3d) statt staticC3d
 
                                     % Add info about model personalization to InputData
                                     % logicals
@@ -257,8 +256,8 @@ for i_wd = i_wd : length(workingDirectories)
                                 if ~flag_modelScaledLeft
                                     [path2Model_left, tf_angle_left, torsionTool_left, tf_angle_fromSource_left, MomArmsResolved_left] =  prepareScaledModel(rootWorkingDirectory, workingDirectory, path2GenericModels, path2bin, path2opensim, bodymass, static, 'left', ...
                                         labFlag, lockSubtalar4Scaling, scaleMuscleStrength, manualMusScaleF, cPrefix, bodyheightGenericModel, BodyHeight, ...
-                                        tf_angle_l, tf_angle_fromSource, strcat(rootWorkingDirectory, staticC3d), torsiontool, tib_torsion_LeftMarkers, ForceModelCreation, checkAndAdaptMomArmsL, sampleInputL, useASTool, useDirectKinematics4TibRotEstimationAsFallback, InputData, ...
-                                        scalePelvisManually, pelvisWidthGenericModel, useStatic4FrontAlignmentAsFallback, tibTorsionAdaptionMethod, varNameKneeAngle_c3d);
+                                        tf_angle_l, tf_angle_fromSource, staticC3d, torsiontool, tib_torsion_LeftMarkers, ForceModelCreation, checkAndAdaptMomArmsL, sampleInputL, useASTool, useDirectKinematics4TibRotEstimationAsFallback, InputData, ...
+                                        scalePelvisManually, pelvisWidthGenericModel, useStatic4FrontAlignmentAsFallback, tibTorsionAdaptionMethod, varNameKneeAngle_c3d); % % % strcat(rootWorkingDirectory, staticC3d) statt staticC3d
 
                                     % Add info about model personalization to InputData
                                     % logicals
@@ -282,7 +281,7 @@ for i_wd = i_wd : length(workingDirectories)
                                     flag_modelScaledLeft = true;
                                 end
                         end
-
+                        
                         % Create external loads file
                         path2extLoad = createExtLoadsFile(path2enf, path2mot, name, firstContact_L, firstContact_R);
 
@@ -414,10 +413,10 @@ for i_wd = i_wd : length(workingDirectories)
                                 overFlowThreshold = overFlowThreshold + overFlowThreshold;
                             end
                         end
-
+                        
                         numFiles = numFiles + 1;
                     end
-
+                
                 catch ME
                     if catchErrors
                         disp(char(strcat('>>>>> An error occured during processing of condition', {' "'}, condition, {'" '},'in wd:', {' '},  workingDirectory,{'. '}, 'Skipped condition in current wd!')));
@@ -432,6 +431,7 @@ for i_wd = i_wd : length(workingDirectories)
                 end
 
                 %% Now run postprocessing if user selected this option
+                
                 if performPostProcessing
 
                     % Wait to make sure all batch files are finished
@@ -462,7 +462,7 @@ for i_wd = i_wd : length(workingDirectories)
                 end
 
             end
-
+            
         catch ME
             if catchErrors
                 disp(char(strcat('>>>>> An error occured during processing of wd:', {' '},  workingDirectory,{'. '}, 'Skipped wd!')));

@@ -27,6 +27,9 @@ subFolders = files(dirFlags); % A structure with extra info.
 
 % Get only the unique folder names into a cell array.
 tmpFolders = fullfile(unique({subFolders.folder})); % Start at 3 to skip . and ..
+% % % add for 01_2026_R2S_ACL that only static folder is searched.
+tmpFolderStatic = tmpFolders(contains(tmpFolders,'Static'));
+tmpFolders = tmpFolders(~contains(tmpFolders,'Static'));
 
 % Add trailing '\' to the paths.
 for j = 1:length(tmpFolders)
@@ -54,6 +57,25 @@ for i = 1:length(FolderNames)
             if isempty(tmpOut)
                 tmpOut = tmpFiles(contains({tmpFiles.name}, staticNamePattern, 'IgnoreCase', true));
                 tmpOut = cellfun(@(x) x(1:end-4), {tmpOut.name}, 'un', 0); % Remove *.c3d
+            end
+            
+            % % % added to be able to process _data_ARISE_ACL folder
+            % structure
+            % If empty try different approach.
+            if isempty(tmpOut)
+
+                % Add trailing '\' to the paths.
+                staticFolderNames = strcat(tmpFolderStatic{1}, '\');
+
+                % Get the files.
+                tmpStaticFiles = dir(fullfile(strcat(staticFolderNames,'\*.c3d')));
+    
+                % Get a logical vector that tells which is a directory.
+                staticfileFlags = ~[tmpStaticFiles.isdir];
+                tmpStaticFiles = tmpStaticFiles(staticfileFlags);
+                tmpOut = tmpStaticFiles(contains({tmpStaticFiles.name}, staticNamePattern, 'IgnoreCase', true));
+                tmpOutName = cellfun(@(x) x(1:end-4), {tmpOut.name}, 'un', 0); % Remove *.c3d
+                tmpOut = fullfile(tmpOut(1).folder,tmpOutName);
             end
 
             % If still empty raise error.
@@ -211,7 +233,8 @@ end
 
 % Now store folderNames_out, staticNames_out to a spreadsheet and
 % store it in the rootDirectory as a files.
-wdTable = cell2table([num2cell(1:length(staticNames_out))', folderNames_out', staticNames_out', cell(length(staticNames_out),1), cell(length(staticNames_out),1)], 'VariableNames',{'Index', 'WorkingDirectories', 'Statics', 'Simulation', 'Processed'});
+wdTable = cell2table([num2cell(1:length(staticNames_out))', folderNames_out', staticNames_out', cell(length(staticNames_out),1), cell(length(staticNames_out),1)],...
+    'VariableNames',{'Index', 'WorkingDirectories', 'Statics', 'Simulation', 'Processed'});
 destination = fullfile(rootDirectory, 'workingDirectories.xlsx');
 writetable(wdTable, destination);
 

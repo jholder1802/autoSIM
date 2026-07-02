@@ -42,15 +42,43 @@ workingDirectory = fullfile(workingDirectory);
 
 % Get all files
 tmp_c3d = strtrim(string(ls('*.c3d')));
-tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
+if strcmp(condition,'LatSidestep')
+    tmp_c3d = tmp_c3d(contains(tmp_c3d,{'Lunges lateral','lunges lateral'}));
+else
+    tmp_c3d = tmp_c3d(contains(tmp_c3d,condition));
+end
+% tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
+% % added (jh, 19.03.2026)
+tmp_enf = strtrim(string(ls('*.enf')));
+forceENFgeneration = false;
+if any(tmp_enf == "") || isempty(tmp_enf) || forceENFgeneration
+    for n = 1:length(tmp_c3d)
+        generateENF_auto(fullfile(rootWorkingDirectory,tmp_c3d{n}),condition)
+    end;clearvars n;
+    tmp_enf = strtrim(string(ls('*.enf')));
+end
+% % 
 
 % Make sure that only *.enf files are listed which have a corresponding *.c3d file
 tmpNamesc3d = erase(tmp_c3d,'.c3d'); % remove file ending
-tmpNamesenf = eraseBetween(tmp_enf,'.','.enf','Boundaries','inclusive'); % remove file ending
+% tmpNamesenf = eraseBetween(tmp_enf,'.','.enf','Boundaries','inclusive'); % remove file ending
+tmpNamesenf = erase(tmp_enf,'.enf');
 commonFileNames = intersect(tmpNamesc3d, tmpNamesenf);
 
 % Exclude static, etc. ...
-commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
+% % % added: jh
+if strcmp(condition,'Counter-Movement Jump')
+    commonFileNames = commonFileNames(and(contains(commonFileNames, condition,'IgnoreCase',true),...
+        and(~contains(commonFileNames, 'Left','IgnoreCase',true),~contains(commonFileNames, 'Right','IgnoreCase',true))));
+elseif strcmp(condition,'Squatting')
+    commonFileNames = commonFileNames(and(contains(commonFileNames, condition,'IgnoreCase',true),...
+        and(~contains(commonFileNames, 'Left','IgnoreCase',true),~contains(commonFileNames, 'Right','IgnoreCase',true))));
+elseif strcmp(condition,'LatSidestep') 
+    commonFileNames = commonFileNames(contains(commonFileNames, 'lunges lateral','IgnoreCase',true));
+% % end added: jh
+else    
+    commonFileNames = commonFileNames(contains(commonFileNames, condition,'IgnoreCase',true));
+end
 
 % Make file list
 files.c3d = strcat(commonFileNames,'.c3d');
@@ -149,7 +177,8 @@ paths.mot = paths.mot(~cellfun('isempty',paths.mot));
 % still run the scaling but will not scale e.g. the pelvis if a marker for
 % scaling is missing.
 
-v = read_trcFile(char(fullfile(rootWorkingDirectory, paths.trc_static)));
+% v = read_trcFile(char(fullfile(rootWorkingDirectory, paths.trc_static)));
+v = read_trcFile(char(paths.trc_static));
 
 if ~(all(ismember(markerSet, v.MarkerList)))
     error(['Warning: The specified static trial <', staticC3d,'> does not contain all necessary markers in wd <', workingDirectory,'>! The following markers are missing: ', strjoin(markerSet(~ismember(markerSet, v.MarkerList)))]);
@@ -219,7 +248,6 @@ for k = 1 : length(paths.c3d)
         FPs = strrep(FPs, 'FPR','Right');
         FPs = strrep(FPs, 'FPI','Invalid');
 
-
         %% Get Event info & more
         % Get marker data for mSEBT event detection
         mkrs = btkGetMarkers(c3d);
@@ -227,9 +255,9 @@ for k = 1 : length(paths.c3d)
         btkCloseAcquisition(c3d);
 
         % Get metdata from c3d
-        cam_rate = metaData.children.TRIAL.children.CAMERA_RATE.info.values(1,1);
-        %startfield = metaData.children.TRIAL.children.ACTUAL_START_FIELD.info.values(1,1);
-        %delta = 1/cam_rate * startfield;
+        % cam_rate = metaData.children.TRIAL.children.CAMERA_RATE.info.values(1,1); % % auskommentiert, jh (12.11.25)
+        % startfield = metaData.children.TRIAL.children.ACTUAL_START_FIELD.info.values(1,1);
+        % delta = 1/cam_rate * startfield;
         delta = 0; % I have added the delta in c3d2OpenSim - so it does not need to be accounted here anymore. If so it would create an offset.
 
         % Get ID to distingusih different sessions. The idea is to
@@ -238,8 +266,9 @@ for k = 1 : length(paths.c3d)
         % the same person the trials will not be overwritten during
         % postprocessing by each other.
         idxSlash = strfind(rootWorkingDirectory,'\');
-        tmpId = rootWorkingDirectory(idxSlash(end-1)+1:idxSlash(end)-1);
-        tmpId = regexprep(tmpId,'[^a-zA-Z0-9]','');
+        % tmpId = rootWorkingDirectory(idxSlash(end-1)+1:idxSlash(end)-1); % % % jh (05.02.2025):changed     
+        tmpId = rootWorkingDirectory(idxSlash(end-2)+1:idxSlash(end-1)-1); % % % jh (05.02.2025):changed
+        tmpId = regexprep(tmpId,'[^a-zA-Z0-9]',''); % % % jh (05.02.2025):changed
         if length(tmpId) < 10
             idAddOn = tmpId;
         else
@@ -261,7 +290,8 @@ for k = 1 : length(paths.c3d)
         end
 
         for i = 1 : nLoops
-            if (strcmp(FPs(i),'Invalid') || strcmp(FPs(i),'Auto')) && ~fullTrialGo
+            if (strcmp(FPs(i),'Invalid') || strcmp(FPs(i),'Auto')) && ~fullTrialGo || ...
+                    (contains(condition,{'Left','Right'}) && ~contains(condition,FPs(i))) && ~fullTrialGo
                 % Do nothing
 
             elseif (strcmp(FPs(i),'Left') || strcmp(FPs(i),'Right')) || fullTrialGo
@@ -282,13 +312,24 @@ for k = 1 : length(paths.c3d)
                         else
                             [InputData, node] = getFirstAndLastFrame(mot_data, mot_labels, condition, FPs, k, i, trialCnt, stepCnt, paths, events, delta, InputData);
                         end
+                    case {'PLUS_COD_noArms','PLUS_SportsMarkerset_noArms','PLUS_SportsMarkerset_noArms_newFPs'}% % jh (23.01.2025): contains.. added
+                        if useC3Devents
+                            mkrs_rate = metaData.children.POINT.children.RATE.info.values;
+                            mot_rate = metaData.children.ANALOG.children.RATE.info.values;
+                            [InputData, node] = getEventsPLUS(mot_data, mot_labels, condition, FPs, k, i, trialCnt, stepCnt, paths, events, delta, InputData, mkrs, mot_rate, mkrs_rate);
+                        else
+                            [InputData, node] = getFirstAndLastFrame(mot_data, mot_labels, condition, FPs, k, i, trialCnt, stepCnt, paths, events, delta, InputData);
+                        end
                 end
 
                 % Get BW and height from *.mp file or c3d file
-                sub_name = metaData.children.SUBJECTS.children.NAMES.info.values();
+                % sub_name = metaData.children.SUBJECTS.children.NAMES.info.values();
+                % % changed (jh, 28.01.2025)
+                sub_name = metaData.children.PROCESSING.children.ID.info.values{1, 1};
                 InputData.(node).subjectName = strcat(sub_name, '_', idAddOn);
                 try
-                    InputData.(node).Bodymass = metaData.children.PROCESSING.children.Bodymass.info.values();
+                    % InputData.(node).Bodymass = metaData.children.PROCESSING.children.Bodymass.info.values();
+                    InputData.(node).Bodymass = metaData.children.PROCESSING.children.Weight.info.values(); % % changed (jh, 28.01.2025)
                     InputData.(node).BodyHeight = metaData.children.PROCESSING.children.Height.info.values();
                 catch
                     [c3dPath, ~] = fileparts(paths.c3d{k});
