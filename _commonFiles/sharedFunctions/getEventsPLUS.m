@@ -6,12 +6,31 @@ side = char(FPs(i)); % % changed: jh (28.01.2025)
 % Get the data
 dat = mot_data(:,contains(mot_labels,strcat(num2str(i),'_vy')));
 time = mot_data(:,contains(mot_labels,'time'));
+time_trc = time(1:mot_rate/mkrs_rate:end);
 threshold=50; % % jh (14.04.2025): threshold 20 N
 
 % Decide if walking trial or SEBT trial
 switch condition
     % % % Walking
-    case {'Gait','Running','Cutting Left','Cutting Right'}
+    case 'Gait'
+        fp_contact = time((dat>threshold));
+        IC = fp_contact(1);
+        TO = fp_contact(end);
+        ICi = IC*mot_rate-1;
+        if isempty(FPs{1}) || isempty(FPs{2})
+            cIC = IC;
+            cTO = TO;
+        else
+            if i == 2 % % contralateral leg is on FP(i == 1)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(1),'_vy')));
+            elseif i == 1 % % contralateral leg is on FP(i == 2)
+                dat_fp_contra = mot_data(:,contains(mot_labels,strcat(num2str(2),'_vy')));
+            end
+            fp_contact_contra= time((dat_fp_contra>threshold));
+            cIC = fp_contact_contra(1);
+            cTO = fp_contact_contra(end);
+        end   
+    case {'Running','Cutting Left','Cutting Right'}
         fp_contact = time((dat>threshold));
         IC = fp_contact(1);
         TO = fp_contact(end);
@@ -31,29 +50,7 @@ switch condition
             fp_contact_contra= time((dat_fp_contra>threshold));
             cIC = fp_contact_contra(1);
             cTO = fp_contact_contra(end);
-        end
-        
-        % Get events via c3d events and mot file
-        % IC ipsilateral
-        % [~,loc_idx] = min(abs(events.(char(strcat(side,'_Foot_Strike')))-(IC + delta)));
-        % ICi = events.(char(strcat(side,'_Foot_Strike')))(loc_idx + 1);
-        
-        % contralateral TO % IC contralateral
-        %{
-        if strcmp(side,'Right')
-            [~,idx_cTO] = min(abs(events.Left_Foot_Off-(IC + delta)));
-            cTO = events.Left_Foot_Off(idx_cTO);
-            idx_cIC = find((events.Left_Foot_Strike > IC + delta),1, 'first');
-            cIC = events.Left_Foot_Strike(idx_cIC);
-        end
-        
-        if strcmp(side,'Left')
-            [~,idx_cTO] = min(abs(events.Right_Foot_Off-(IC + delta)));
-            cTO = events.Right_Foot_Off(idx_cTO);
-            idx_cIC = find((events.Right_Foot_Strike > IC + delta),1, 'first');
-            cIC = events.Right_Foot_Strike(idx_cIC);
-        end
-        %}
+        end        
     % % % Counter-Movement Jump: whole movement
     %{
     case 'Counter-Movement Jump' % % whole movement
@@ -121,34 +118,21 @@ switch condition
         ICi = IC*mot_rate-1; 
         cTO = TO; 
         cIC = IC;
-    case 'Squatting' % % jh (15.04.2025): added, only landing
+    case {'Squatting','Squatting Left','Squatting Right'} % % jh (25.06.2026)
+        thresholdFrame = [1,20];
         waistback_z = mkrs.WaistBack(:,3);  
-        threshold=mean(waistback_z(25:150))*0.99;
-        index1 = (find(waistback_z < threshold, 1,"first")-1)*(mot_rate/mkrs_rate);
-        index2 = (find(waistback_z < threshold, 1,"last")-1)*(mot_rate/mkrs_rate);
-        IC = time(index1);
-        TO = time(index2);
-        ICi = IC*mot_rate-1; 
-        cTO = TO; 
-        cIC = IC;
-    case 'Squatting Left' % % jh (15.04.2025): added, only landing
-        waistback_z = mkrs.WaistBack(:,3);  
-        threshold=mean(waistback_z(25:150))*0.99;
-        index1 = (find(waistback_z < threshold, 1,"first")-1)*(mot_rate/mkrs_rate);
-        index2 = (find(waistback_z < threshold, 1,"last")-1)*(mot_rate/mkrs_rate);
-        IC = time(index1);
-        TO = time(index2);
-        ICi = IC*mot_rate-1; 
-        cTO = TO; 
-        cIC = IC; 
-    case 'Squatting Right' % % jh (15.04.2025): added, only landing
-        waistback_z = mkrs.WaistBack(:,3);  
-        threshold=mean(waistback_z(25:150))*0.99;
-        index1 = (find(waistback_z < threshold, 1,"first")-1)*(mot_rate/mkrs_rate);
-        index2 = (find(waistback_z < threshold, 1,"last")-1)*(mot_rate/mkrs_rate);
-        IC = time(index1);
-        TO = time(index2);
-        ICi = IC*mot_rate-1; 
+        threshold=mean(waistback_z(thresholdFrame(1):thresholdFrame(2)))*0.98;
+        [~, ilowPos] = min(waistback_z);
+        if max(waistback_z(thresholdFrame(1):thresholdFrame(2)))-threshold > 10
+            [threshold,iThreshold] = max(waistback_z(thresholdFrame(1):thresholdFrame(2)));
+            threshold = threshold * 0.995;
+            thresholdFrame(2) = iThreshold;
+        end
+        index1 = (thresholdFrame(2)-1 + find(waistback_z(thresholdFrame(2):ilowPos) < threshold, 1,"first")-1);
+        index2 = ilowPos-1+(find(waistback_z(ilowPos:end)>threshold, 1, "first")-1);       
+        IC = time_trc(index1);
+        TO = time_trc(index2);
+        ICi = IC*mkrs_rate-1; 
         cTO = TO; 
         cIC = IC;
     case {'Generic'} % % % jh (14.05.2025): added for Y-Balance-Test (Gerlinde Greiner)

@@ -50,7 +50,7 @@ end
 % tmp_enf = strtrim(string(ls('*.*Trial*.enf')));
 % % added (jh, 19.03.2026)
 tmp_enf = strtrim(string(ls('*.enf')));
-forceENFgeneration = true;
+forceENFgeneration = false;
 if any(tmp_enf == "") || isempty(tmp_enf) || forceENFgeneration
     for n = 1:length(tmp_c3d)
         generateENF_auto(fullfile(rootWorkingDirectory,tmp_c3d{n}),condition)
